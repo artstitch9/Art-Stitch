@@ -6,20 +6,20 @@ const PRODUCTS = [
     title: 'Gorro Mesh Hat de Red — crudo',
     price: 9000,
     img: 'product-crudo.jpg',
-    desc: 'Tejido con hilo de algodón color crudo.'
+    desc: 'Tejido con hilo de algodón color crudo, talle unico.'
   },
   {
     id: 'gorro-negro',
     title: 'Gorro Mesh Hat de Red — negro',
     price: 9000,
     img: 'product-negro.jpg',
-    desc: 'Tejido con hilo de algodón color negro.'
+    desc: 'Tejido con hilo de algodón color negro, talle unico.'
   }
 ];
 
 // ====== AJUSTES ======
 // Pegar tu LINK de Mercado Pago aquí cuando lo tengas:
-let MERCADO_PAGO_LINK = "https://link.mercadopago.com.ar/artstitch";
+let MERCADO_PAGO_LINK ="https://link.mercadopago.com.ar/artstitch";
 
 // ====== CÓDIGO ======
 const productsEl = document.getElementById('products');
@@ -132,6 +132,7 @@ transferBtn.addEventListener('click', ()=>{
 // INIT
 renderProducts();
 renderCart();
+
 
 
 
