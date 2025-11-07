@@ -19,7 +19,7 @@ const PRODUCTS = [
 
 // ====== AJUSTES ======
 // Pegar tu LINK de Mercado Pago aquí cuando lo tengas:
-let MERCADO_PAGO_LINK = 'https://link.mercadopago.com.ar/artstitch';
+let MERCADO_PAGO_LINK = "https://link.mercadopago.com.ar/artstitch";
 
 // ====== CÓDIGO ======
 const productsEl = document.getElementById('products');
@@ -132,6 +132,7 @@ transferBtn.addEventListener('click', ()=>{
 // INIT
 renderProducts();
 renderCart();
+
 
 
 
