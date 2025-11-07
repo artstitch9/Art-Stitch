@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Art Stitch — Tienda</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <!-- PONÉ TU LOGO AQUÍ: agrega logo.jpg a la carpeta cuando quieras -->
+    <img src="logo.jpg" alt="Art Stitch" class="logo-placeholder" onerror="this.style.display='block'; this.nextElementSibling.style.display='block'">
+    <h1 class="site-title">Art Stitch</h1>
+  </header>
+
+  <main class="container">
+    <section class="products" id="products">
+      <!-- Productos se cargan desde script.js -->
+    </section>
+
+    <aside class="cart" id="cart">
+      <h2>Carrito</h2>
+      <div id="cart-items"></div>
+      <div class="cart-footer">
+        <div class="cart-total">Total: $<span id="cart-total">0</span></div>
+        <button id="checkout-btn" class="btn">Pagar</button>
+      </div>
+      <div id="checkout-options" class="checkout-options hidden">
+        <h3>Elegí método de pago</h3>
+        <button id="mp-btn" class="btn">Pagar con Mercado Pago</button>
+        <button id="transfer-btn" class="btn alt">Transferencia</button>
+        <div id="transfer-info" class="transfer-info hidden">
+          <p><strong>Alias:</strong> Martu.Abril.cd</p>
+          <p><strong>Nombre:</strong> Martina Abril Gonzalez</p>
+          <p>Por favor enviá comprobante por WhatsApp o Instagram para coordinar envío.</p>
+        </div>
+        <p class="small">📦 El envío se coordina después de la compra por WhatsApp o Instagram.</p>
+      </div>
+    </aside>
+
+    <section class="about">
+      <h2>Sobre mí</h2>
+      <p id="about-text">Podés editar este texto para contar sobre Art Stitch (tu técnica, tiempo de elaboración, materiales, etc.).</p>
+    </section>
+
+    <section class="shipping">
+      <h2>🚚 Envíos</h2>
+      <p>Hacemos envíos a todo el país por Correo Argentino.</p>
+      <p>También podés retirar sin costo por zona sur.</p>
+      <p>Los pedidos se despachan dentro de las 48 hs hábiles.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© Art Stitch</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
