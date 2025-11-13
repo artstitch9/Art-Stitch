@@ -5,14 +5,14 @@ const PRODUCTS = [
     id: 'gorro-crudo',
     title: 'Gorro Mesh Hat de Red — crudo',
     price: 9000,
-    img: 'product-crudo.jpg',
+    img: ['product-crudo1.jpg', 'product-crudo2.jpg']
     desc: 'Tejido con hilo de algodón color crudo, talle unico.'
   },
   {
     id: 'gorro-negro',
     title: 'Gorro Mesh Hat de Red — negro',
     price: 9000,
-    img: 'product-negro.jpg',
+    img: ['product-negro1.jpg', 'product-negro2.jpg']
     desc: 'Tejido con hilo de algodón color negro, talle unico.'
   }
 ];
@@ -132,6 +132,7 @@ transferBtn.addEventListener('click', ()=>{
 // INIT
 renderProducts();
 renderCart();
+
 
 
 
