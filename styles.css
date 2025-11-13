@@ -221,3 +221,42 @@ body{
     width: 120px; /* más pequeño en móviles */
   }
 }
+
+/* ----- SLIDER DE IMÁGENES POR PRODUCTO ----- */
+.product-images {
+  display: flex;
+  overflow-x: hidden; /* ocultamos scroll */
+  scroll-snap-type: x mandatory; /* snap para deslizar por imagen */
+  gap: 8px;
+  position: relative;
+}
+
+.product-images img {
+  flex: 0 0 100%; /* ocupa todo el contenedor */
+  max-width: 100%;
+  border-radius: 10px;
+  cursor: pointer;
+  scroll-snap-align: center;
+  transition: transform 0.2s ease;
+}
+
+.product-images img:hover {
+  transform: scale(1.05);
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.7);
+  border: none;
+  padding: 6px 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 18px;
+  z-index: 2;
+}
+
+.carousel-btn.left { left: 10px; }
+.carousel-btn.right { right: 10px; }
