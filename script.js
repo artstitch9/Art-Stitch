@@ -16,8 +16,16 @@ const PRODUCTS = [
   }
 ];
 
+// ====== PRODUCTOS DESTACADOS PARA EL CARRUSEL ======
+const FEATURED = [
+  { img: 'destacado1.jpg', title: 'Destacado 1' },
+  { img: 'destacado2.jpg', title: 'Destacado 2' },
+  { img: 'destacado3.jpg', title: 'Destacado 3' }
+];
+
 let MERCADO_PAGO_LINK ="https://link.mercadopago.com.ar/artstitch";
 
+// ====== ELEMENTOS ======
 const cartItemsEl = document.getElementById('cart-items');
 const cartTotalEl = document.getElementById('cart-total');
 const checkoutBtn = document.getElementById('checkout-btn');
@@ -46,12 +54,13 @@ cartBtn.addEventListener('click', ()=> cartEl.classList.toggle('hidden'));
 function renderFeaturedCarousel(){
   const carouselEl = document.querySelector('#featured-carousel .carousel');
   const dotsEl = document.querySelector('#featured-carousel .carousel-dots');
-  carouselEl.innerHTML=''; dotsEl.innerHTML='';
+  carouselEl.innerHTML = '';
+  dotsEl.innerHTML = '';
 
-  PRODUCTS.forEach((p,i)=>{
+  FEATURED.forEach((f,i)=>{
     const img = document.createElement('img');
-    img.src = p.images[0];
-    img.alt = p.title;
+    img.src = f.img;
+    img.alt = f.title;
     carouselEl.appendChild(img);
 
     const dot = document.createElement('span');
@@ -107,7 +116,11 @@ function addToCart(id){
 
 function renderCart(){
   cartItemsEl.innerHTML='';
-  if(cart.length===0){ cartItemsEl.innerHTML='<p class="small">Tu carrito está vacío.</p>'; cartTotalEl.textContent='0'; return; }
+  if(cart.length===0){ 
+    cartItemsEl.innerHTML='<p class="small">Tu carrito está vacío.</p>'; 
+    cartTotalEl.textContent='0'; 
+    return; 
+  }
   let total=0;
   cart.forEach(ci=>{
     total+=ci.price*ci.qty;
@@ -143,7 +156,10 @@ checkoutBtn.addEventListener('click', ()=> {
   if(cart.length===0){ alert('El carrito está vacío.'); return; }
   checkoutOptions.classList.toggle('hidden');
 });
-mpBtn.addEventListener('click', ()=> { if(!MERCADO_PAGO_LINK){alert('Link de MP no configurado');return;} window.open(MERCADO_PAGO_LINK,'_blank'); });
+mpBtn.addEventListener('click', ()=> { 
+  if(!MERCADO_PAGO_LINK){alert('Link de MP no configurado');return;} 
+  window.open(MERCADO_PAGO_LINK,'_blank'); 
+});
 transferBtn.addEventListener('click', ()=> transferInfo.classList.toggle('hidden'));
 
 // ====== LIGHTBOX ======
@@ -191,7 +207,7 @@ function showNext(){
   lightboxImg.src = currentImages[currentIndex];
 }
 
-// EVENTOS
+// EVENTOS LIGHTBOX
 lightboxClose.addEventListener('click', closeLightbox);
 lightboxPrev.addEventListener('click', showPrev);
 lightboxNext.addEventListener('click', showNext);
@@ -203,4 +219,3 @@ lightboxModal.addEventListener('click', e => {
 renderFeaturedCarousel();
 renderCategoryProducts();
 renderCart();
-
