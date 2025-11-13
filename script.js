@@ -5,14 +5,14 @@ const PRODUCTS = [
     id: 'gorro-crudo',
     title: 'Gorro Mesh Hat de Red — crudo',
     price: 9000,
-    img: ['product-crudo1.jpg', 'product-crudo2.jpg', 'product-crudo3.jpg']
+    images: ['product-crudo1.jpg', 'product-crudo2.jpg', 'product-crudo3.jpg'],
     desc: 'Tejido con hilo de algodón color crudo, talle unico.'
   },
   {
     id: 'gorro-negro',
     title: 'Gorro Mesh Hat de Red — negro',
     price: 9000,
-    img: ['product-negro1.jpg', 'product-negro2.jpg']
+    images: ['product-negro1.jpg', 'product-negro2.jpg'],
     desc: 'Tejido con hilo de algodón color negro, talle unico.'
   }
 ];
@@ -38,25 +38,50 @@ function saveCart(){
 }
 function formatMoney(n){ return Number(n).toLocaleString('es-AR'); }
 
-function renderProducts(){
+function renderProducts() {
   productsEl.innerHTML = '';
+
   PRODUCTS.forEach(p => {
     const card = document.createElement('article');
     card.className = 'card';
-    const img = document.createElement('img');
-    img.src = p.img;
-    img.alt = p.title;
-    img.onerror = function(){ this.src = 'placeholder-product.png' };
-    card.innerHTML = `
-      <h3>${p.title}</h3>
-      <p class="small">${p.desc}</p>
-      <div class="price">$${formatMoney(p.price)}</div>
-    `;
+
+    // 🧵 Crear contenedor de imágenes
+    const imgContainer = document.createElement('div');
+    imgContainer.classList.add('product-images');
+
+    // Si el producto tiene varias imágenes
+    if (Array.isArray(p.images)) {
+      p.images.forEach(src => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = p.title;
+        img.onerror = function() { this.src = 'placeholder-product.png' };
+        imgContainer.appendChild(img);
+      });
+    } else {
+      // Si solo tiene una imagen
+      const img = document.createElement('img');
+      img.src = p.img || 'placeholder-product.png';
+      img.alt = p.title;
+      img.onerror = function() { this.src = 'placeholder-product.png' };
+      imgContainer.appendChild(img);
+    }
+
+    // Agregar imágenes al card
+    card.appendChild(imgContainer);
+
+    const info = document.createElement('div');
+info.innerHTML = `
+  <h3>${p.title}</h3>
+  <p class="small">${p.desc}</p>
+  <div class="price">$${formatMoney(p.price)}</div>
+`;
+card.appendChild(info);
+    
     const add = document.createElement('button');
     add.className = 'btn';
     add.textContent = 'Agregar al carrito';
     add.onclick = ()=> addToCart(p.id);
-    card.appendChild(img);
     card.appendChild(add);
     productsEl.appendChild(card);
   });
@@ -67,7 +92,7 @@ function addToCart(id){
   if(item) item.qty++;
   else {
     const p = PRODUCTS.find(x=>x.id===id);
-    cart.push({ id: p.id, title: p.title, price: p.price, qty: 1, img: p.img });
+    cart.push({ id: p.id, title: p.title, price: p.price, qty: 1, img: Array.isArray(p.images) ? p.images[0] : p.img });
   }
   saveCart();
   renderCart();
@@ -132,6 +157,7 @@ transferBtn.addEventListener('click', ()=>{
 // INIT
 renderProducts();
 renderCart();
+
 
 
 
