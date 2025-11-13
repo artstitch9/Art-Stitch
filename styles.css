@@ -221,37 +221,39 @@ body{
   .lightbox-modal img{max-width:80%; max-height:80%;}
 }
 
-/* ----- MENÚ LATERAL / OVERLAY ----- */
+/* ----- MENÚ LATERAL / OVERLAY MEJORADO ----- */
 .menu-overlay {
   position: fixed;
   inset: 0;
   background: rgba(247, 235, 230, 0.95); /* beige transparente */
   color: var(--text);
   display: flex;
-  justify-content: center;
+  justify-content: flex-start; /* se abre desde la izquierda */
   align-items: center;
   z-index: 999;
   flex-direction: column;
-  transition: opacity 0.3s, transform 0.3s;
+  transition: transform 0.3s ease, opacity 0.3s ease;
   opacity: 0;
-  transform: scale(0.95);
+  transform: translateX(-100%); /* oculto a la izquierda */
   pointer-events: none;
+  padding-left: 40px; /* espacio interno desde el borde */
 }
 
 .menu-overlay.show {
   opacity: 1;
-  transform: scale(1);
+  transform: translateX(0); /* aparece */
   pointer-events: auto;
 }
 
 .menu-overlay ul {
   list-style: none;
   padding: 0;
-  text-align: center;
+  margin: 0;
+  width: 100%;
 }
 
 .menu-overlay li {
-  margin: 12px 0;
+  margin: 16px 0;
 }
 
 .menu-overlay a {
@@ -259,12 +261,14 @@ body{
   text-decoration: none;
   font-size: 1.5rem;
   font-weight: 500;
-  padding: 6px 16px;
+  padding: 8px 16px;
   border-radius: 8px;
-  transition: background 0.2s, color 0.2s;
+  display: inline-block;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
 }
 
 .menu-overlay a:hover {
   background: var(--accent-2);
   color: var(--btn);
+  transform: translateX(6px); /* pequeño movimiento al pasar el mouse */
 }
