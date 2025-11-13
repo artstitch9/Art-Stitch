@@ -9,16 +9,17 @@
 </head>
 <body>
 
- <!-- LIGHTBOX -->
-<div id="lightboxModal" class="lightbox hidden">
-  <button id="lightboxClose" class="lightbox-btn">&times;</button>
-  <button id="lightboxPrev" class="lightbox-btn">&#10094;</button>
-  <img id="lightboxImg" src="" alt="">
-  <button id="lightboxNext" class="lightbox-btn">&#10095;</button>
-</div>
-  
+  <!-- LIGHTBOX -->
+  <div id="lightboxModal" class="lightbox-modal">
+    <div class="lightbox-img-container">
+      <button id="lightboxClose" class="lightbox-close">&times;</button>
+      <button id="lightboxPrev" class="lightbox-prev">&#10094;</button>
+      <img id="lightboxImg" src="" alt="">
+      <button id="lightboxNext" class="lightbox-next">&#10095;</button>
+    </div>
+  </div>
+
   <header class="site-header">
-    <!-- PONÉ TU LOGO AQUÍ: agrega logo.png a la carpeta cuando quieras -->
     <img src="logo.png" alt="Art Stitch" class="logo">
     <h1 class="site-title">Art Stitch</h1>
   </header>
@@ -68,7 +69,6 @@
   <script src="script.js"></script>
 </body>
 </html>
-
 
 
 
