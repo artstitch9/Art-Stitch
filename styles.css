@@ -82,19 +82,26 @@ body{
 .card p{margin:0;color:var(--muted);font-size:0.9rem}
 .card .price{font-weight:700;margin-top:6px}
 
-/* --- Galería dentro del card del producto --- */
 .product-images {
   display: flex;
-  justify-content: center;
-  align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
-  width: 100%;
-  margin-bottom: 12px;
+  overflow-x: auto; /* permite scroll horizontal */
+  -webkit-overflow-scrolling: touch; /* suave en móviles */
+  padding-bottom: 4px; /* espacio abajo de las imágenes */
+}
+
+.product-images::-webkit-scrollbar {
+  height: 6px;
+}
+
+.product-images::-webkit-scrollbar-thumb {
+  background: var(--muted);
+  border-radius: 3px;
 }
 
 .product-images img {
-  width: 85px;             
+  flex: 0 0 auto; /* evita que las imágenes se encojan */
+  width: 85px;
   height: 85px;
   object-fit: cover;
   border-radius: 6px;
@@ -193,4 +200,24 @@ body{
 @media (max-width:900px){
   .container{grid-template-columns: 1fr; padding-bottom:120px;}
   .cart{position:relative; top:0}
+}
+
+/* ----- AJUSTE DEL LOGO ----- */
+.logo {
+  width: 150px;
+  height: auto;
+  display: block;
+  margin: 0 auto 12px;
+}
+
+.site-header {
+  text-align: center;
+  padding: 20px 16px 12px;
+}
+
+/* ----- LOGO RESPONSIVO EN CELULAR ----- */
+@media (max-width: 500px) {
+  .logo {
+    width: 120px; /* más pequeño en móviles */
+  }
 }
