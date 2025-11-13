@@ -9,17 +9,27 @@
 </head>
 <body>
 
-  <!-- MENÚ HAMBURGUESA -->
-  <button id="menu-btn" class="menu-btn">&#9776;</button>
-  <nav id="menu-overlay" class="menu-overlay hidden">
+  <!-- MENÚ -->
+  <button class="menu-btn">&#9776;</button>
+  <div class="menu-overlay hidden">
     <ul>
-      <li><a href="#" data-section="featured-carousel">Inicio</a></li>
-      <li><a href="#">Categorías</a></li>
-      <li><a href="#">Personalizados</a></li>
-      <li><a href="#">Contacto</a></li>
-      <li><a href="#">Info</a></li>
+      <li><a href="#featured-carousel">Inicio</a></li>
+      <li><a href="#category-products">Productos</a></li>
+      <li><a href="#about">Sobre mí</a></li>
+      <li><a href="#contact">Contacto</a></li>
+      <li><a href="#custom">Personalizados</a></li>
     </ul>
-  </nav>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div id="lightboxModal" class="lightbox-modal hidden">
+    <div class="lightbox-img-container">
+      <button id="lightboxClose" class="close-detail">&times;</button>
+      <button id="lightboxPrev" class="lightbox-prev">&#10094;</button>
+      <img id="lightboxImg" src="" alt="">
+      <button id="lightboxNext" class="lightbox-next">&#10095;</button>
+    </div>
+  </div>
 
   <header class="site-header">
     <img src="logo.png" alt="Art Stitch" class="logo">
@@ -31,27 +41,15 @@
     <!-- CARRUSEL DESTACADOS -->
     <section id="featured-carousel">
       <h2>DESTACADOS</h2>
-      <div class="carousel">
-        <!-- Se cargan imágenes desde script.js -->
-      </div>
+      <div class="carousel"></div>
       <div class="carousel-dots"></div>
     </section>
 
-    <!-- PRODUCTOS -->
-    <section class="products" id="products"></section>
+    <!-- SECCIÓN DE PRODUCTOS POR CATEGORÍA -->
+    <section class="products" id="category-products"></section>
 
-    <!-- DETALLE DE PRODUCTO -->
-    <section id="product-detail" class="hidden">
-      <button id="close-detail" class="close-detail">&times;</button>
-      <h2 id="detail-title"></h2>
-      <div class="carousel" id="detail-carousel"></div>
-      <div class="carousel-dots" id="detail-dots"></div>
-      <p id="detail-price"></p>
-      <p id="detail-desc"></p>
-    </section>
-
-    <!-- CARRITO FLOTANTE -->
-    <button id="cart-btn" class="cart-btn">🛒</button>
+    <!-- CARRITO -->
+    <button class="cart-btn">🛒</button>
     <aside class="cart hidden" id="cart">
       <h2>Carrito</h2>
       <div id="cart-items"></div>
@@ -68,14 +66,24 @@
           <p><strong>Nombre:</strong> Martina Abril Gonzalez</p>
           <p>Por favor enviá comprobante por WhatsApp o Instagram para coordinar envío.</p>
         </div>
-        <p class="small">📦 El envío se coordina después de la compra por WhatsApp o Instagram.</p>
+        <p class="small">📦 El envío se coordina después de la compra.</p>
       </div>
     </aside>
 
     <!-- SOBRE MÍ -->
-    <section class="about">
+    <section class="about" id="about">
       <h2>Sobre mí</h2>
       <p id="about-text">Podés editar este texto para contar sobre Art Stitch (tu técnica, tiempo de elaboración, materiales, etc.).</p>
+    </section>
+
+    <!-- CONTACTO / PERSONALIZADOS -->
+    <section id="contact">
+      <h2>Contacto</h2>
+      <p>Redes, WhatsApp, etc.</p>
+    </section>
+    <section id="custom">
+      <h2>Personalizados</h2>
+      <p>Podés pedir productos a medida.</p>
     </section>
 
   </main>
