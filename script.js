@@ -1,4 +1,3 @@
-/* script.js - tienda simple con carrito en localStorage */
 // ====== PRODUCTOS ======
 const PRODUCTS = [
   {
@@ -18,10 +17,9 @@ const PRODUCTS = [
 ];
 
 // ====== AJUSTES ======
-// Pegar tu LINK de Mercado Pago aquí cuando lo tengas:
 let MERCADO_PAGO_LINK ="https://link.mercadopago.com.ar/artstitch";
 
-// ====== CÓDIGO ======
+// ====== ELEMENTOS ======
 const productsEl = document.getElementById('products');
 const cartItemsEl = document.getElementById('cart-items');
 const cartTotalEl = document.getElementById('cart-total');
@@ -33,9 +31,11 @@ const transferInfo = document.getElementById('transfer-info');
 
 let cart = JSON.parse(localStorage.getItem('artstitch_cart') || '[]');
 
+// ====== FUNCIONES ======
 function saveCart(){
   localStorage.setItem('artstitch_cart', JSON.stringify(cart));
 }
+
 function formatMoney(n){ return Number(n).toLocaleString('es-AR'); }
 
 function renderProducts() {
@@ -45,54 +45,47 @@ function renderProducts() {
     const card = document.createElement('article');
     card.className = 'card';
 
-    // 🧵 Crear contenedor de imágenes
+    // Contenedor de imágenes
     const imgContainer = document.createElement('div');
     imgContainer.classList.add('product-images');
 
-    // Si el producto tiene varias imágenes
-    if (Array.isArray(p.images)) {
-      p.images.forEach(src => {
-        const img = document.createElement('img');
-        img.src = src;
-        img.alt = p.title;
-        img.onerror = function() { this.src = 'placeholder-product.png' };
-        imgContainer.appendChild(img);
-      });
-    } else {
-      // Si solo tiene una imagen
+    p.images.forEach(src => {
       const img = document.createElement('img');
-      img.src = p.img || 'placeholder-product.png';
+      img.src = src;
       img.alt = p.title;
       img.onerror = function() { this.src = 'placeholder-product.png' };
       imgContainer.appendChild(img);
-    }
+    });
 
-    // Agregar imágenes al card
     card.appendChild(imgContainer);
 
     const info = document.createElement('div');
-info.innerHTML = `
-  <h3>${p.title}</h3>
-  <p class="small">${p.desc}</p>
-  <div class="price">$${formatMoney(p.price)}</div>
-`;
-card.appendChild(info);
-    
+    info.innerHTML = `
+      <h3>${p.title}</h3>
+      <p class="small">${p.desc}</p>
+      <div class="price">$${formatMoney(p.price)}</div>
+    `;
+    card.appendChild(info);
+
     const add = document.createElement('button');
     add.className = 'btn';
     add.textContent = 'Agregar al carrito';
     add.onclick = ()=> addToCart(p.id);
     card.appendChild(add);
+
     productsEl.appendChild(card);
   });
+
+  initLightbox(); // inicializar lightbox después de render
 }
 
+// ====== CARRITO ======
 function addToCart(id){
   const item = cart.find(i=>i.id===id);
   if(item) item.qty++;
   else {
     const p = PRODUCTS.find(x=>x.id===id);
-    cart.push({ id: p.id, title: p.title, price: p.price, qty: 1, img: Array.isArray(p.images) ? p.images[0] : p.img });
+    cart.push({ id: p.id, title: p.title, price: p.price, qty: 1, img: p.images[0] });
   }
   saveCart();
   renderCart();
@@ -136,6 +129,7 @@ window.changeQty = function(id, delta){
   renderCart();
 }
 
+// ====== CHECKOUT ======
 checkoutBtn.addEventListener('click', ()=>{
   if(cart.length === 0){ alert('El carrito está vacío.'); return; }
   checkoutOptions.classList.toggle('hidden');
@@ -143,86 +137,54 @@ checkoutBtn.addEventListener('click', ()=>{
 
 mpBtn.addEventListener('click', ()=>{
   if(!MERCADO_PAGO_LINK){
-    alert('El link de Mercado Pago aún no está configurado. Podés pagar por transferencia o pegar tu link en script.js para usar Mercado Pago.');
+    alert('El link de Mercado Pago aún no está configurado.');
     return;
   }
-  // Envío simple: abrimos nueva pestaña al link de Mercado Pago
   window.open(MERCADO_PAGO_LINK, '_blank');
 });
 
-transferBtn.addEventListener('click', ()=>{
-  transferInfo.classList.toggle('hidden');
-});
+transferBtn.addEventListener('click', ()=> transferInfo.classList.toggle('hidden'));
 
-// INIT
-renderProducts();
-renderCart();
-
-// ----- SLIDER DE IMÁGENES POR PRODUCTO -----
-document.querySelectorAll('.card').forEach(card => {
-  const container = card.querySelector('.product-images');
-  if (!container) return;
-
-  // Crear botones
-  const btnLeft = document.createElement('button');
-  btnLeft.textContent = '<';
-  btnLeft.className = 'carousel-btn left';
-
-  const btnRight = document.createElement('button');
-  btnRight.textContent = '>';
-  btnRight.className = 'carousel-btn right';
-
-  card.appendChild(btnLeft);
-  card.appendChild(btnRight);
-
-  btnLeft.addEventListener('click', () => {
-    container.scrollBy({ left: -container.offsetWidth, behavior: 'smooth' });
-  });
-
-  btnRight.addEventListener('click', () => {
-    container.scrollBy({ left: container.offsetWidth, behavior: 'smooth' });
-  });
-});
-
-// ----- LIGHTBOX -----
+// ====== LIGHTBOX ======
 const lightboxModal = document.getElementById('lightboxModal');
 const lightboxImg = document.getElementById('lightboxImg');
 const lightboxClose = document.getElementById('lightboxClose');
 const lightboxPrev = document.getElementById('lightboxPrev');
 const lightboxNext = document.getElementById('lightboxNext');
 
-let currentImages = []; // imágenes del producto actual
+let currentImages = [];
 let currentIndex = 0;
 
-document.querySelectorAll('.product-images img').forEach((img, idx) => {
-  img.addEventListener('click', () => {
-    const card = img.closest('.card');
-    const productId = card.querySelector('h3').textContent;
-    const product = PRODUCTS.find(p => p.title === productId);
+function initLightbox() {
+  document.querySelectorAll('.product-images img').forEach((img, idx) => {
+    img.addEventListener('click', () => {
+      const card = img.closest('.card');
+      const productId = card.querySelector('h3').textContent;
+      const product = PRODUCTS.find(p => p.title === productId);
 
-    currentImages = product.images;
-    currentIndex = product.images.indexOf(img.src.split('/').pop());
-
-    openLightbox(currentImages[currentIndex]);
+      currentImages = product.images;
+      currentIndex = product.images.indexOf(img.src.split('/').pop());
+      openLightbox(currentImages[currentIndex]);
+    });
   });
-});
+}
 
-function openLightbox(src) {
+function openLightbox(src){
   lightboxImg.src = src;
   lightboxModal.classList.add('active');
 }
 
-function closeLightbox() {
+function closeLightbox(){
   lightboxModal.classList.remove('active');
 }
 
-function showPrev() {
+function showPrev(){
   if(currentImages.length === 0) return;
   currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
   lightboxImg.src = currentImages[currentIndex];
 }
 
-function showNext() {
+function showNext(){
   if(currentImages.length === 0) return;
   currentIndex = (currentIndex + 1) % currentImages.length;
   lightboxImg.src = currentImages[currentIndex];
@@ -231,11 +193,11 @@ function showNext() {
 lightboxClose.addEventListener('click', closeLightbox);
 lightboxPrev.addEventListener('click', showPrev);
 lightboxNext.addEventListener('click', showNext);
+lightboxModal.addEventListener('click', e => { if(e.target === lightboxModal) closeLightbox(); });
 
-// Cerrar al hacer clic fuera de la imagen
-lightboxModal.addEventListener('click', e => {
-  if(e.target === lightboxModal) closeLightbox();
-});
+// ====== INIT ======
+renderProducts();
+renderCart();
 
 
 
