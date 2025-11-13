@@ -45,3 +45,54 @@ body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--
 .menu-overlay ul{list-style:none;padding:0;text-align:center;}
 .menu-overlay li{margin:10px 0;}
 .menu-overlay a{color:#fff;text-decoration:none;font-size:1.5rem;}
+
+/* ----- CARRUSEL DESTACADOS RESPONSIVO ----- */
+#featured-carousel h2 {
+  text-align:center;
+  margin-bottom:12px;
+}
+
+#featured-carousel .carousel {
+  display:flex;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  gap:8px;
+  scroll-behavior: smooth;
+  max-width:600px; /* ancho máximo en desktop */
+  margin:0 auto;
+}
+
+#featured-carousel .carousel img {
+  flex:0 0 100%;
+  border-radius:10px;
+  scroll-snap-align:center;
+  cursor:pointer;
+  object-fit:cover;
+  height:300px; /* alto desktop */
+}
+
+#featured-carousel .carousel-dots {
+  text-align:center;
+  margin-top:6px;
+}
+
+#featured-carousel .carousel-dots span {
+  display:inline-block;
+  width:8px;
+  height:8px;
+  margin:0 3px;
+  background:#ccc;
+  border-radius:50%;
+  cursor:pointer;
+}
+
+#featured-carousel .carousel-dots .active {
+  background:#222;
+}
+
+/* Ajustes móviles */
+@media (max-width:900px){
+  #featured-carousel .carousel img {
+    height:200px; /* alto móvil */
+  }
+}
