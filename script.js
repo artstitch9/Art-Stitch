@@ -184,6 +184,58 @@ document.querySelectorAll('.card').forEach(card => {
   });
 });
 
+// ----- LIGHTBOX -----
+const lightboxModal = document.getElementById('lightboxModal');
+const lightboxImg = document.getElementById('lightboxImg');
+const lightboxClose = document.getElementById('lightboxClose');
+const lightboxPrev = document.getElementById('lightboxPrev');
+const lightboxNext = document.getElementById('lightboxNext');
+
+let currentImages = []; // imágenes del producto actual
+let currentIndex = 0;
+
+document.querySelectorAll('.product-images img').forEach((img, idx) => {
+  img.addEventListener('click', () => {
+    const card = img.closest('.card');
+    const productId = card.querySelector('h3').textContent;
+    const product = PRODUCTS.find(p => p.title === productId);
+
+    currentImages = product.images;
+    currentIndex = product.images.indexOf(img.src.split('/').pop());
+
+    openLightbox(currentImages[currentIndex]);
+  });
+});
+
+function openLightbox(src) {
+  lightboxImg.src = src;
+  lightboxModal.classList.add('active');
+}
+
+function closeLightbox() {
+  lightboxModal.classList.remove('active');
+}
+
+function showPrev() {
+  if(currentImages.length === 0) return;
+  currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+  lightboxImg.src = currentImages[currentIndex];
+}
+
+function showNext() {
+  if(currentImages.length === 0) return;
+  currentIndex = (currentIndex + 1) % currentImages.length;
+  lightboxImg.src = currentImages[currentIndex];
+}
+
+lightboxClose.addEventListener('click', closeLightbox);
+lightboxPrev.addEventListener('click', showPrev);
+lightboxNext.addEventListener('click', showNext);
+
+// Cerrar al hacer clic fuera de la imagen
+lightboxModal.addEventListener('click', e => {
+  if(e.target === lightboxModal) closeLightbox();
+});
 
 
 
