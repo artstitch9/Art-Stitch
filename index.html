@@ -9,15 +9,17 @@
 </head>
 <body>
 
-  <!-- LIGHTBOX -->
-  <div id="lightboxModal" class="lightbox-modal">
-    <div class="lightbox-img-container">
-      <button id="lightboxClose" class="lightbox-close">&times;</button>
-      <button id="lightboxPrev" class="lightbox-prev">&#10094;</button>
-      <img id="lightboxImg" src="" alt="">
-      <button id="lightboxNext" class="lightbox-next">&#10095;</button>
-    </div>
-  </div>
+  <!-- MENÚ HAMBURGUESA -->
+  <button id="menu-btn" class="menu-btn">&#9776;</button>
+  <nav id="menu-overlay" class="menu-overlay hidden">
+    <ul>
+      <li><a href="#" data-section="featured-carousel">Inicio</a></li>
+      <li><a href="#">Categorías</a></li>
+      <li><a href="#">Personalizados</a></li>
+      <li><a href="#">Contacto</a></li>
+      <li><a href="#">Info</a></li>
+    </ul>
+  </nav>
 
   <header class="site-header">
     <img src="logo.png" alt="Art Stitch" class="logo">
@@ -25,11 +27,32 @@
   </header>
 
   <main class="container">
-    <section class="products" id="products">
-      <!-- Productos se cargan desde script.js -->
+
+    <!-- CARRUSEL DESTACADOS -->
+    <section id="featured-carousel">
+      <h2>DESTACADOS</h2>
+      <div class="carousel">
+        <!-- Se cargan imágenes desde script.js -->
+      </div>
+      <div class="carousel-dots"></div>
     </section>
 
-    <aside class="cart" id="cart">
+    <!-- PRODUCTOS -->
+    <section class="products" id="products"></section>
+
+    <!-- DETALLE DE PRODUCTO -->
+    <section id="product-detail" class="hidden">
+      <button id="close-detail" class="close-detail">&times;</button>
+      <h2 id="detail-title"></h2>
+      <div class="carousel" id="detail-carousel"></div>
+      <div class="carousel-dots" id="detail-dots"></div>
+      <p id="detail-price"></p>
+      <p id="detail-desc"></p>
+    </section>
+
+    <!-- CARRITO FLOTANTE -->
+    <button id="cart-btn" class="cart-btn">🛒</button>
+    <aside class="cart hidden" id="cart">
       <h2>Carrito</h2>
       <div id="cart-items"></div>
       <div class="cart-footer">
@@ -49,17 +72,12 @@
       </div>
     </aside>
 
+    <!-- SOBRE MÍ -->
     <section class="about">
       <h2>Sobre mí</h2>
       <p id="about-text">Podés editar este texto para contar sobre Art Stitch (tu técnica, tiempo de elaboración, materiales, etc.).</p>
     </section>
 
-    <section class="shipping">
-      <h2>🚚 Envíos</h2>
-      <p>Hacemos envíos a todo el país por Correo Argentino.</p>
-      <p>También podés retirar sin costo por zona sur.</p>
-      <p>Los pedidos se despachan dentro de las 48 hs hábiles.</p>
-    </section>
   </main>
 
   <footer class="site-footer">
@@ -69,12 +87,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
