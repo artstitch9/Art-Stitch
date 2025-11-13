@@ -58,6 +58,19 @@ menuOverlay.addEventListener('click', e => {
   if(e.target === menuOverlay) menuOverlay.classList.remove('show');
 });
 
+// ====== CERRAR MENÚ AL HACER CLICK EN UN ENLACE Y SCROLL SUAVE ======
+menuOverlay.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault(); // evita salto instantáneo
+    const targetId = link.getAttribute('href').substring(1);
+    const targetEl = document.getElementById(targetId);
+    if(targetEl){
+      targetEl.scrollIntoView({ behavior: 'smooth' });
+    }
+    menuOverlay.classList.remove('show'); // cierra el menú
+  });
+});
+
 // ====== CARRITO ======
 cartBtn.addEventListener('click', ()=> cartEl.classList.toggle('hidden'));
 
@@ -219,3 +232,4 @@ lightboxModal.addEventListener('click', e => { if(e.target === lightboxModal) cl
 renderFeaturedCarousel();
 renderCategoryProducts();
 renderCart();
+
