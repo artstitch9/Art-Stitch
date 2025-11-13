@@ -158,6 +158,33 @@ transferBtn.addEventListener('click', ()=>{
 renderProducts();
 renderCart();
 
+// ----- SLIDER DE IMÁGENES POR PRODUCTO -----
+document.querySelectorAll('.card').forEach(card => {
+  const container = card.querySelector('.product-images');
+  if (!container) return;
+
+  // Crear botones
+  const btnLeft = document.createElement('button');
+  btnLeft.textContent = '<';
+  btnLeft.className = 'carousel-btn left';
+
+  const btnRight = document.createElement('button');
+  btnRight.textContent = '>';
+  btnRight.className = 'carousel-btn right';
+
+  card.appendChild(btnLeft);
+  card.appendChild(btnRight);
+
+  btnLeft.addEventListener('click', () => {
+    container.scrollBy({ left: -container.offsetWidth, behavior: 'smooth' });
+  });
+
+  btnRight.addEventListener('click', () => {
+    container.scrollBy({ left: container.offsetWidth, behavior: 'smooth' });
+  });
+});
+
+
 
 
 
