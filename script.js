@@ -1,7 +1,55 @@
 // ===============================
 // FIX PARA CLICK EN CELULAR
 // ===============================
-document.addEventListener("touchstart", ()=>{}, false);
+document.addEventListener("touchstart", function(){}, true);
+
+
+// ===============================
+// MENU (abre/cierra en PC y CEL)
+// ===============================
+const menuBtn = document.querySelector('.menu-btn');
+const menuOverlay = document.querySelector('.menu-overlay');
+
+if(menuBtn && menuOverlay){
+
+  const toggleMenu = (e)=>{
+    e.stopPropagation();
+    menuOverlay.classList.toggle('show');
+  };
+
+  menuBtn.addEventListener('click', toggleMenu);
+  menuBtn.addEventListener('touchstart', toggleMenu);
+
+  // evitar cerrar tocando adentro
+  menuOverlay.querySelector('ul').addEventListener('click', e => e.stopPropagation());
+
+  // cerrar tocando afuera
+  document.addEventListener('click', ()=>{
+    menuOverlay.classList.remove('show');
+  });
+
+  document.addEventListener('touchstart', ()=>{
+    menuOverlay.classList.remove('show');
+  });
+}
+
+
+// ===============================
+// SPA — Cambiar Pantallas
+// ===============================
+const screens = document.querySelectorAll('.screen');
+const menuItems = document.querySelectorAll('.menu-overlay a');
+
+function showScreen(name) {
+  screens.forEach(s => s.classList.add('hidden'));
+  document.getElementById(`screen-${name}`).classList.remove('hidden');
+  menuOverlay.classList.remove('show');
+}
+
+menuItems.forEach(item => {
+  item.addEventListener('click', () => showScreen(item.dataset.screen));
+});
+
 
 // ===============================
 // DATOS
@@ -31,6 +79,7 @@ const FEATURED = [
 
 let MERCADO_PAGO_LINK = "https://link.mercadopago.com.ar/artstitch";
 
+
 // ===============================
 // ELEMENTOS
 // ===============================
@@ -55,93 +104,76 @@ let cart = JSON.parse(localStorage.getItem('artstitch_cart') || '[]');
 let currentImages = [];
 let currentIndex = 0;
 
+
 // ===============================
-// FUNCIONES BASICAS
+// FUNCIONES UTILES
 // ===============================
 function saveCart(){ localStorage.setItem('artstitch_cart', JSON.stringify(cart)); }
 function formatMoney(n){ return Number(n).toLocaleString('es-AR'); }
 
+
 // ===============================
-// CARRITO — FUNCIONA EN CELULAR Y PC
+// CARRITO — ABRIR/CERRAR + AUTOABRIR
 // ===============================
+if (cartBtn && cartEl) {
 
-// mostrar carrito → remover hidden
-function openCart() {
-  cartEl.classList.remove('hidden');
-}
+  const toggleCart = (e)=>{
+    e.stopPropagation();
+    cartEl.classList.toggle('hidden');
+  };
 
-// ocultar carrito → agregar hidden
-function closeCart() {
-  cartEl.classList.add('hidden');
-}
-
-// toggle con protección
-function toggleCart(e){
-  e.stopPropagation();
-  cartEl.classList.toggle('hidden');
-}
-
-if(cartBtn && cartEl){
   cartBtn.addEventListener('click', toggleCart);
   cartBtn.addEventListener('touchstart', toggleCart);
 
-  // NO cerrar tocando dentro del carrito
   cartEl.addEventListener('click', e => e.stopPropagation());
   cartEl.addEventListener('touchstart', e => e.stopPropagation());
 
-  // cerrar tocando afuera
   document.addEventListener('click', (e)=>{
     if(!cartEl.contains(e.target) && !cartBtn.contains(e.target)){
-      closeCart();
+      cartEl.classList.add('hidden');
     }
   });
 
   document.addEventListener('touchstart', (e)=>{
     if(!cartEl.contains(e.target) && !cartBtn.contains(e.target)){
-      closeCart();
+      cartEl.classList.add('hidden');
     }
   });
 }
 
+
 // ===============================
-// AGREGAR AL CARRITO
+// AGREGAR AL CARRITO (abre carrito)
 // ===============================
 function addToCart(id){
   const item = cart.find(i=>i.id===id);
-
   if(item) item.qty++;
   else {
     const p = PRODUCTS.find(x=>x.id===id);
-    cart.push({
-      id:p.id,
-      title:p.title,
-      price:p.price,
-      qty:1,
-      img:p.images[0]
-    });
+    cart.push({id:p.id, title:p.title, price:p.price, qty:1, img:p.images[0]});
   }
 
   saveCart();
   renderCart();
 
-  // 💥 ABRIR CARRITO AUTOMÁTICAMENTE
+  // abrir carrito automáticamente
   cartEl.classList.remove('hidden');
 }
 
+
+// ===============================
+// RENDER DEL CARRITO
+// ===============================
 function renderCart(){
   cartItemsEl.innerHTML='';
-
   if(cart.length===0){
     cartItemsEl.innerHTML='<p class="small">Tu carrito está vacío.</p>';
     cartTotalEl.textContent='0';
     return;
   }
-
   let total = 0;
-
   cart.forEach(ci=>{
     total += ci.price * ci.qty;
-
     const div = document.createElement('div');
     div.className='cart-item';
     div.innerHTML=`
@@ -158,20 +190,18 @@ function renderCart(){
     `;
     cartItemsEl.appendChild(div);
   });
-
   cartTotalEl.textContent = formatMoney(total);
 }
 
 window.changeQty = function(id, delta){
   const it = cart.find(i=>i.id===id);
   if(!it) return;
-
   it.qty += delta;
   if(it.qty <= 0) cart = cart.filter(i=>i.id!==id);
-
   saveCart();
   renderCart();
-}
+};
+
 
 // ===============================
 // CHECKOUT
@@ -180,8 +210,10 @@ checkoutBtn.addEventListener('click', ()=> {
   if(cart.length===0){ alert('El carrito está vacío.'); return; }
   checkoutOptions.classList.toggle('hidden');
 });
+
 mpBtn.addEventListener('click', ()=> window.open(MERCADO_PAGO_LINK,'_blank'));
 transferBtn.addEventListener('click', ()=> transferInfo.classList.toggle('hidden'));
+
 
 // ===============================
 // CARRUSEL
@@ -220,6 +252,7 @@ function renderFeaturedCarousel(){
   });
 }
 
+
 // ===============================
 // PRODUCTOS
 // ===============================
@@ -242,9 +275,9 @@ function renderCategoryProducts(){
     `;
     categoryEl.appendChild(card);
   });
-
   initLightbox();
 }
+
 
 // ===============================
 // LIGHTBOX
@@ -291,11 +324,12 @@ function showNext(){
 if(lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
 if(lightboxPrev) lightboxPrev.addEventListener('click', showPrev);
 if(lightboxNext) lightboxNext.addEventListener('click', showNext);
-if(lightboxModal) {
-  lightboxModal.addEventListener('click', e => {
+if(lightboxModal){
+  lightboxModal.addEventListener('click', e=>{
     if(e.target === lightboxModal) closeLightbox();
   });
 }
+
 
 // ===============================
 // INIT
@@ -303,4 +337,3 @@ if(lightboxModal) {
 renderFeaturedCarousel();
 renderCategoryProducts();
 renderCart();
-
