@@ -1,32 +1,40 @@
 // ===============================
-// MENU PERFECTO (pointer events)
+// FIX TOUCH PARA CELULAR
+// ===============================
+document.addEventListener("touchstart", function(){}, true);
+
+// ===============================
+// MENU (PC + CEL sin parpadeo)
 // ===============================
 const menuBtn = document.querySelector('.menu-btn');
 const menuOverlay = document.querySelector('.menu-overlay');
 
 if(menuBtn && menuOverlay){
-
-  // abrir / cerrar
-  menuBtn.addEventListener('pointerdown', (e)=>{
+  
+  const toggleMenu = (e)=>{
     e.stopPropagation();
     menuOverlay.classList.toggle('show');
+  };
+
+  // Abrir menú
+  menuBtn.addEventListener('click', toggleMenu);
+  menuBtn.addEventListener('touchend', toggleMenu);
+
+  // Evitar cierre si tocamos dentro
+  menuOverlay.querySelector('ul').addEventListener('click', e => e.stopPropagation());
+
+  // Cerrar tocando afuera
+  document.addEventListener('click', ()=>{
+    menuOverlay.classList.remove('show');
   });
 
-  // prevenir cierre desde adentro
-  menuOverlay.querySelector('ul').addEventListener('pointerdown', (e)=>{
-    e.stopPropagation();
-  });
-
-  // cerrar tocando afuera
-  document.addEventListener('pointerdown', (e)=>{
-    if(!menuOverlay.contains(e.target) && !menuBtn.contains(e.target)){
-      menuOverlay.classList.remove('show');
-    }
+  document.addEventListener('touchend', ()=>{
+    menuOverlay.classList.remove('show');
   });
 }
 
 // ===============================
-// SPA — Cambiar Pantallas
+// SPA — Cambiar pantallas
 // ===============================
 const screens = document.querySelectorAll('.screen');
 const menuItems = document.querySelectorAll('.menu-overlay a');
@@ -40,7 +48,6 @@ function showScreen(name) {
 menuItems.forEach(item => {
   item.addEventListener('click', () => showScreen(item.dataset.screen));
 });
-
 
 // ===============================
 // DATOS
@@ -70,7 +77,6 @@ const FEATURED = [
 
 let MERCADO_PAGO_LINK = "https://link.mercadopago.com.ar/artstitch";
 
-
 // ===============================
 // ELEMENTOS
 // ===============================
@@ -95,113 +101,129 @@ let cart = JSON.parse(localStorage.getItem('artstitch_cart') || '[]');
 let currentImages = [];
 let currentIndex = 0;
 
-
 // ===============================
-// FUNCIONES UTILES
+// UTILS
 // ===============================
 function saveCart(){ localStorage.setItem('artstitch_cart', JSON.stringify(cart)); }
 function formatMoney(n){ return Number(n).toLocaleString('es-AR'); }
 
+// ===============================
+// CARRITO (PC + CEL sin parpadeo)
+// ===============================
+if(cartBtn && cartEl){
 
-// ===============================
-// CARRITO — SIN PARPADEO + AUTOABRIR
-// ===============================
-if (cartBtn && cartEl) {
+  const openCart = ()=>{
+    cartEl.classList.remove('hidden');
+  };
 
   const toggleCart = (e)=>{
     e.stopPropagation();
     cartEl.classList.toggle('hidden');
   };
 
-  cartBtn.addEventListener(IS_TOUCH ? 'touchstart' : 'click', toggleCart);
+  cartBtn.addEventListener('click', toggleCart);
+  cartBtn.addEventListener('touchend', toggleCart);
 
   cartEl.addEventListener('click', e => e.stopPropagation());
+  cartEl.addEventListener('touchend', e => e.stopPropagation());
 
-  // cerrar tocando afuera
-  document.addEventListener(IS_TOUCH ? 'touchstart' : 'click', (e)=>{
+  document.addEventListener('click', (e)=>{
     if(!cartEl.contains(e.target) && !cartBtn.contains(e.target)){
       cartEl.classList.add('hidden');
     }
   });
+
+  document.addEventListener('touchend', (e)=>{
+    if(!cartEl.contains(e.target) && !cartBtn.contains(e.target)){
+      cartEl.classList.add('hidden');
+    }
+  });
+
+  // Para usar desde addToCart()
+  window.openCart = openCart;
 }
 
-
 // ===============================
-// AGREGAR AL CARRITO (abre carrito)
+// AGREGAR AL CARRITO — Autoabrir PC + CEL
 // ===============================
 function addToCart(id){
 
-  // ➜ ABRE EL CARRITO SIEMPRE, PC y CEL
-  cartEl.classList.remove('hidden');
-
-  const item = cart.find(i=>i.id===id);
-  if(item) item.qty++;
+  const existing = cart.find(i=>i.id === id);
+  if(existing) existing.qty++;
   else {
-    const p = PRODUCTS.find(x=>x.id===id);
+    const p = PRODUCTS.find(x => x.id === id);
     cart.push({id:p.id, title:p.title, price:p.price, qty:1, img:p.images[0]});
   }
 
   saveCart();
   renderCart();
-
-  // abrir carrito automáticamente
-  cartEl.classList.remove('hidden');
+  openCart();  // ← SIEMPRE abre en PC + CEL
 }
 
-
 // ===============================
-// RENDER DEL CARRITO
+// RENDER CARRITO
 // ===============================
 function renderCart(){
-  cartItemsEl.innerHTML='';
-  if(cart.length===0){
-    cartItemsEl.innerHTML='<p class="small">Tu carrito está vacío.</p>';
-    cartTotalEl.textContent='0';
+  cartItemsEl.innerHTML = '';
+
+  if(cart.length === 0){
+    cartItemsEl.innerHTML = '<p class="small">Tu carrito está vacío.</p>';
+    cartTotalEl.textContent = '0';
     return;
   }
+
   let total = 0;
+
   cart.forEach(ci=>{
     total += ci.price * ci.qty;
+
     const div = document.createElement('div');
-    div.className='cart-item';
-    div.innerHTML=`
-      <img src="${ci.img}" onerror="this.src='placeholder-product.png'">
+    div.className = 'cart-item';
+
+    div.innerHTML = `
+      <img src="${ci.img}">
       <div style="flex:1">
         <div style="font-weight:600">${ci.title}</div>
         <div class="small">$${formatMoney(ci.price)} x ${ci.qty}</div>
       </div>
       <div class="qty">
-        <button class="btn" onclick="changeQty('${ci.id}',-1)">-</button>
+        <button class="btn" onclick="changeQty('${ci.id}', -1)">-</button>
         <div style="min-width:20px;text-align:center">${ci.qty}</div>
-        <button class="btn" onclick="changeQty('${ci.id}',1)">+</button>
+        <button class="btn" onclick="changeQty('${ci.id}', 1)">+</button>
       </div>
     `;
     cartItemsEl.appendChild(div);
   });
+
   cartTotalEl.textContent = formatMoney(total);
 }
 
 window.changeQty = function(id, delta){
-  const it = cart.find(i=>i.id===id);
+  const it = cart.find(i=>i.id === id);
   if(!it) return;
+
   it.qty += delta;
-  if(it.qty <= 0) cart = cart.filter(i=>i.id!==id);
+  if(it.qty <= 0){
+    cart = cart.filter(i=>i.id !== id);
+  }
+
   saveCart();
   renderCart();
 };
 
-
 // ===============================
 // CHECKOUT
 // ===============================
-checkoutBtn.addEventListener('click', ()=> {
-  if(cart.length===0){ alert('El carrito está vacío.'); return; }
+checkoutBtn.addEventListener('click', ()=>{
+  if(cart.length===0){
+    alert('El carrito está vacío.');
+    return;
+  }
   checkoutOptions.classList.toggle('hidden');
 });
 
 mpBtn.addEventListener('click', ()=> window.open(MERCADO_PAGO_LINK,'_blank'));
 transferBtn.addEventListener('click', ()=> transferInfo.classList.toggle('hidden'));
-
 
 // ===============================
 // CARRUSEL
@@ -211,8 +233,8 @@ function renderFeaturedCarousel(){
   const dotsEl = document.querySelector('#featured-carousel .carousel-dots');
   if(!carouselEl) return;
 
-  carouselEl.innerHTML = '';
-  dotsEl.innerHTML = '';
+  carouselEl.innerHTML='';
+  dotsEl.innerHTML='';
 
   FEATURED.forEach((f,i)=>{
     const img = document.createElement('img');
@@ -222,102 +244,81 @@ function renderFeaturedCarousel(){
 
     const dot = document.createElement('span');
     if(i===0) dot.classList.add('active');
-    dot.addEventListener('click', ()=> {
+    dot.addEventListener('click', ()=>{
       carouselEl.scrollLeft = img.offsetLeft;
       updateDots(i);
     });
     dotsEl.appendChild(dot);
   });
 
-  function updateDots(activeIndex){
+  function updateDots(active){
     dotsEl.querySelectorAll('span')
-      .forEach((d,i)=> d.classList.toggle('active', i===activeIndex));
+      .forEach((d,i)=> d.classList.toggle('active', i===active));
   }
-
-  carouselEl.addEventListener('scroll', ()=>{
-    const index = Math.round(carouselEl.scrollLeft / carouselEl.offsetWidth);
-    updateDots(index);
-  });
 }
-
 
 // ===============================
 // PRODUCTOS
 // ===============================
 function renderCategoryProducts(){
-  const categoryEl = document.getElementById('category-products');
-  if(!categoryEl) return;
+  const category = document.getElementById('category-products');
+  if(!category) return;
 
-  categoryEl.innerHTML='';
+  category.innerHTML='';
+
   PRODUCTS.forEach(p=>{
     const card = document.createElement('article');
     card.className='card';
-    card.innerHTML=`
+
+    card.innerHTML = `
       <div class="product-images">
-        ${p.images.map(src=>`<img src="${src}" alt="${p.title}">`).join('')}
+        ${p.images.map(src => `<img src="${src}" alt="${p.title}">`).join('')}
       </div>
       <h3>${p.title}</h3>
       <p class="small">${p.desc}</p>
       <div class="price">$${formatMoney(p.price)}</div>
       <button class="btn" onclick="addToCart('${p.id}')">Agregar al carrito</button>
     `;
-    categoryEl.appendChild(card);
+
+    category.appendChild(card);
   });
+
   initLightbox();
 }
-
 
 // ===============================
 // LIGHTBOX
 // ===============================
-function initLightbox() {
-  document.querySelectorAll('.product-images img').forEach((img)=>{
+function initLightbox(){
+  document.querySelectorAll('.product-images img').forEach(img=>{
     img.addEventListener('click', ()=>{
       const card = img.closest('.card');
-      const productTitle = card.querySelector('h3').textContent;
-
-      const product = PRODUCTS.find(p => p.title === productTitle);
-      if(!product) return;
+      const title = card.querySelector('h3').textContent;
+      const product = PRODUCTS.find(p=>p.title === title);
 
       currentImages = product.images;
+      currentIndex = currentImages.indexOf(img.src.split('/').pop());
+      if(currentIndex < 0) currentIndex=0;
 
-      const filename = img.src.split('/').pop();
-      currentIndex = currentImages.indexOf(filename);
-      if(currentIndex < 0) currentIndex = 0;
-
-      openLightbox(currentImages[currentIndex]);
+      lightboxImg.src = currentImages[currentIndex];
+      lightboxModal.classList.remove('hidden');
     });
   });
 }
 
-function openLightbox(src){
-  lightboxImg.src = src;
-  lightboxModal.classList.remove('hidden');
-}
-
-function closeLightbox(){
-  lightboxModal.classList.add('hidden');
-}
-
-function showPrev(){
+lightboxClose.addEventListener('click', ()=> lightboxModal.classList.add('hidden'));
+lightboxPrev.addEventListener('click', ()=>{
   currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
   lightboxImg.src = currentImages[currentIndex];
-}
-
-function showNext(){
+});
+lightboxNext.addEventListener('click', ()=>{
   currentIndex = (currentIndex + 1) % currentImages.length;
   lightboxImg.src = currentImages[currentIndex];
-}
+});
 
-if(lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
-if(lightboxPrev) lightboxPrev.addEventListener('click', showPrev);
-if(lightboxNext) lightboxNext.addEventListener('click', showNext);
-if(lightboxModal){
-  lightboxModal.addEventListener('click', e=>{
-    if(e.target === lightboxModal) closeLightbox();
-  });
-}
-
+lightboxModal.addEventListener('click', e=>{
+  if(e.target === lightboxModal) lightboxModal.classList.add('hidden');
+});
 
 // ===============================
 // INIT
@@ -325,5 +326,3 @@ if(lightboxModal){
 renderFeaturedCarousel();
 renderCategoryProducts();
 renderCart();
-
-
