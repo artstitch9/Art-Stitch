@@ -1,69 +1,142 @@
 <!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Art Stitch</title>
+
+  <!-- FAVICON: poné en la raíz un archivo llamado "favicon.png" -->
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- MENÚ -->
+<button class="menu-btn">☰</button>
+<div class="menu-overlay">
+  <ul>
+    <li data-screen="inicio">Inicio</li>
+    <li data-screen="productos">Productos</li>
+    <li data-screen="about">Sobre mí</li>
+    <li data-screen="contacto">Contacto</li>
+  </ul>
+</div>
+
+<main>
+
+<!-- ========================== -->
+<!-- PANTALLA INICIO -->
+<!-- ========================== -->
+<section id="screen-inicio" class="screen">
+
+  <!-- CARRUSEL DESTACADOS -->
+  <section id="featured-carousel">
+    <div class="carousel"></div>
+    <div class="carousel-dots"></div>
+  </section>
+
+  <!-- SEPARADOR -->
+  <div class="separator"></div>
+
+  <!-- SECCIÓN IMAGEN (la cargás vos) -->
+  <section id="promo-image">
+    <img src="" alt="" id="promo-img-placeholder">
+  </section>
+
+  <!-- SEPARADOR -->
+  <div class="separator"></div>
+
+  <!-- CONTACTANOS -->
+  <section id="mini-contact" class="mini-contact">
+    <h2>Contactanos</h2>
+    <a href="mailto:artstitich2025@gmail.com">artstitich2025@gmail.com</a>
+  </section>
+
 </section>
 
 
+
+<!-- ========================== -->
+<!-- PANTALLA PRODUCTOS -->
+<!-- ========================== -->
+<section id="screen-productos" class="screen hidden">
+  <h2>Productos</h2>
+  <div id="category-products" class="products-grid"></div>
+</section>
+
+
+<!-- ========================== -->
 <!-- PANTALLA CONTACTO -->
+<!-- ========================== -->
 <section id="screen-contacto" class="screen hidden">
-<h2>Contacto</h2>
-<p>Redes, WhatsApp, etc.</p>
+  <h2>Contacto</h2>
+  <p>Podés poner redes, WhatsApp, Instagram, etc.</p>
 </section>
 
 
+<!-- ========================== -->
 <!-- PANTALLA SOBRE MI -->
+<!-- ========================== -->
 <section id="screen-about" class="screen hidden">
-<h2>Sobre mí</h2>
-<p>Podés editar este texto para contar sobre Art Stitch.</p>
+  <h2>Sobre mí</h2>
+  <p>Texto para editar y contar tu historia.</p>
 </section>
-
 
 </main>
 
 
+<!-- CARRITO -->
 <button class="cart-btn">🛒</button>
 <aside class="cart hidden" id="cart">
-<h2>Carrito</h2>
-<div id="cart-items"></div>
-<div class="cart-footer">
-<div class="cart-total">Total: $<span id="cart-total">0</span></div>
-<button id="checkout-btn" class="btn">Pagar</button>
-</div>
-<div id="checkout-options" class="checkout-options hidden">
-<h3>Elegí método de pago</h3>
-<button id="mp-btn" class="btn">Pagar con Mercado Pago</button>
-<button id="transfer-btn" class="btn alt">Transferencia</button>
-<div id="transfer-info" class="transfer-info hidden">
-<p><strong>Alias:</strong> Martu.Abril.cd</p>
-<p><strong>Nombre:</strong> Martina Abril Gonzalez</p>
-<p>Por favor enviá comprobante por WhatsApp o Instagram para coordinar envío.</p>
-</div>
-<p class="small">📦 El envío se coordina después de la compra.</p>
-</div>
+  <h2>Carrito</h2>
+  <div id="cart-items"></div>
+
+  <div class="cart-footer">
+    <div class="cart-total">Total: $<span id="cart-total">0</span></div>
+    <button id="checkout-btn" class="btn">Pagar</button>
+  </div>
+
+  <div id="checkout-options" class="checkout-options hidden">
+    <h3>Elegí método de pago</h3>
+    <button id="mp-btn" class="btn">Pagar con Mercado Pago</button>
+    <button id="transfer-btn" class="btn alt">Transferencia</button>
+
+    <div id="transfer-info" class="transfer-info hidden">
+      <p><strong>Alias:</strong> Martu.Abril.cd</p>
+      <p><strong>Nombre:</strong> Martina Abril Gonzalez</p>
+      <p>Enviá comprobante por WhatsApp o Instagram.</p>
+    </div>
+
+    <p class="small">📦 El envío se coordina después de la compra.</p>
+  </div>
 </aside>
 
 
 <footer class="site-footer">
-<p>© Art Stitch</p>
+  <p>© Art Stitch</p>
 </footer>
 
 
+<!-- ========================== -->
+<!-- SPA JS -->
+<!-- ========================== -->
 <script>
-// SPA simple: cambiar pantallas
-const screens = document.querySelectorAll('.screen');
-const menuItems = document.querySelectorAll('.menu-overlay ul li');
+  const screens = document.querySelectorAll('.screen');
+  const menuItems = document.querySelectorAll('.menu-overlay ul li');
 
+  function showScreen(name) {
+    screens.forEach(s => s.classList.add('hidden'));
+    document.getElementById(`screen-${name}`).classList.remove('hidden');
+    document.querySelector('.menu-overlay').classList.remove('show');
+  }
 
-function showScreen(name) {
-screens.forEach(s => s.classList.add('hidden'));
-document.getElementById(`screen-${name}`).classList.remove('hidden');
-document.querySelector('.menu-overlay').classList.add('hidden');
-}
-
-
-menuItems.forEach(item => {
-item.addEventListener('click', () => showScreen(item.dataset.screen));
-});
+  menuItems.forEach(item => {
+    item.addEventListener('click', () => showScreen(item.dataset.screen));
+  });
 </script>
 
+<script src="script.js"></script>
 
 </body>
 </html>
