@@ -136,7 +136,7 @@ p{line-height:1.5}
 #featured-carousel .carousel img{
   flex:0 0 100%;
   max-width:900px;
-  height:320px;
+  height:420px;
   object-fit:cover;
   border-radius:12px;
   scroll-snap-align:center;
@@ -376,3 +376,4 @@ p{line-height:1.5}
   margin-top:40px;
   border-top:2px solid var(--terracotta);
 }
+
