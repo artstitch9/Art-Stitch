@@ -279,6 +279,7 @@ p{line-height:1.5}
   border-radius:50%;
   font-size:18px;
   z-index:1200;
+  cursor:pointer;
 }
 
 .cart{
@@ -292,11 +293,14 @@ p{line-height:1.5}
   padding:18px;
   overflow:auto;
   z-index:1150;
-  transform:translateX(110%);
-  transition:transform .25s;
+
+  /* 💥 CARRITO VISIBLE por defecto */
+  transform:translateX(0);
+  transition:transform .25s ease;
 }
 
 .cart.hidden{
+  /* 💥 Solo se oculta cuando tiene .hidden */
   transform:translateX(110%);
 }
 
@@ -314,6 +318,7 @@ p{line-height:1.5}
   object-fit:cover;
   border-radius:8px;
 }
+
 
 /* ====== LIGHTBOX ====== */
 .lightbox-modal{
@@ -383,5 +388,6 @@ p{line-height:1.5}
   margin-top:40px;
   border-top:2px solid var(--terracotta);
 }
+
 
 
