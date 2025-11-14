@@ -137,3 +137,14 @@ p{line-height:1.5}
   color: #6b5c4f;
   letter-spacing: 1px;
 }
+
+.mail-link {
+  color: #c38bb3;      /* el color que quieras */
+  text-decoration: none; /* sin subrayado */
+  font-weight: 600;
+  cursor: pointer;       /* muestra la manito */
+}
+
+.mail-link:hover {
+  opacity: 0.8;          /* un efecto suave */
+}
