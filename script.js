@@ -1,11 +1,17 @@
 // ===============================
+// DETECTAR SI ES TÁCTIL
+// ===============================
+const IS_TOUCH = 'ontouchstart' in window;
+
+
+// ===============================
 // FIX PARA CLICK EN CELULAR
 // ===============================
 document.addEventListener("touchstart", function(){}, true);
 
 
 // ===============================
-// MENU (abre/cierra en PC y CEL)
+// MENU (sin parpadeo)
 // ===============================
 const menuBtn = document.querySelector('.menu-btn');
 const menuOverlay = document.querySelector('.menu-overlay');
@@ -17,19 +23,17 @@ if(menuBtn && menuOverlay){
     menuOverlay.classList.toggle('show');
   };
 
-  menuBtn.addEventListener('click', toggleMenu);
-  menuBtn.addEventListener('touchstart', toggleMenu);
+  // SOLO UN EVENTO SEGÚN PLATAFORMA
+  menuBtn.addEventListener(IS_TOUCH ? 'touchstart' : 'click', toggleMenu);
 
   // evitar cerrar tocando adentro
   menuOverlay.querySelector('ul').addEventListener('click', e => e.stopPropagation());
 
   // cerrar tocando afuera
-  document.addEventListener('click', ()=>{
-    menuOverlay.classList.remove('show');
-  });
-
-  document.addEventListener('touchstart', ()=>{
-    menuOverlay.classList.remove('show');
+  document.addEventListener(IS_TOUCH ? 'touchstart' : 'click', (e)=>{
+    if(!menuOverlay.contains(e.target) && !menuBtn.contains(e.target)){
+      menuOverlay.classList.remove('show');
+    }
   });
 }
 
@@ -113,7 +117,7 @@ function formatMoney(n){ return Number(n).toLocaleString('es-AR'); }
 
 
 // ===============================
-// CARRITO — ABRIR/CERRAR + AUTOABRIR
+// CARRITO — SIN PARPADEO + AUTOABRIR
 // ===============================
 if (cartBtn && cartEl) {
 
@@ -122,19 +126,12 @@ if (cartBtn && cartEl) {
     cartEl.classList.toggle('hidden');
   };
 
-  cartBtn.addEventListener('click', toggleCart);
-  cartBtn.addEventListener('touchstart', toggleCart);
+  cartBtn.addEventListener(IS_TOUCH ? 'touchstart' : 'click', toggleCart);
 
   cartEl.addEventListener('click', e => e.stopPropagation());
-  cartEl.addEventListener('touchstart', e => e.stopPropagation());
 
-  document.addEventListener('click', (e)=>{
-    if(!cartEl.contains(e.target) && !cartBtn.contains(e.target)){
-      cartEl.classList.add('hidden');
-    }
-  });
-
-  document.addEventListener('touchstart', (e)=>{
+  // cerrar tocando afuera
+  document.addEventListener(IS_TOUCH ? 'touchstart' : 'click', (e)=>{
     if(!cartEl.contains(e.target) && !cartBtn.contains(e.target)){
       cartEl.classList.add('hidden');
     }
