@@ -1,42 +1,29 @@
 // ===============================
-// DETECTAR SI ES TÁCTIL
-// ===============================
-const IS_TOUCH = 'ontouchstart' in window;
-
-
-// ===============================
-// FIX PARA CLICK EN CELULAR
-// ===============================
-document.addEventListener("touchstart", function(){}, true);
-
-
-// ===============================
-// MENU (sin parpadeo)
+// MENU PERFECTO (pointer events)
 // ===============================
 const menuBtn = document.querySelector('.menu-btn');
 const menuOverlay = document.querySelector('.menu-overlay');
 
 if(menuBtn && menuOverlay){
 
-  const toggleMenu = (e)=>{
+  // abrir / cerrar
+  menuBtn.addEventListener('pointerdown', (e)=>{
     e.stopPropagation();
     menuOverlay.classList.toggle('show');
-  };
+  });
 
-  // SOLO UN EVENTO SEGÚN PLATAFORMA
-  menuBtn.addEventListener(IS_TOUCH ? 'touchstart' : 'click', toggleMenu);
-
-  // evitar cerrar tocando adentro
-  menuOverlay.querySelector('ul').addEventListener('click', e => e.stopPropagation());
+  // prevenir cierre desde adentro
+  menuOverlay.querySelector('ul').addEventListener('pointerdown', (e)=>{
+    e.stopPropagation();
+  });
 
   // cerrar tocando afuera
-  document.addEventListener(IS_TOUCH ? 'touchstart' : 'click', (e)=>{
+  document.addEventListener('pointerdown', (e)=>{
     if(!menuOverlay.contains(e.target) && !menuBtn.contains(e.target)){
       menuOverlay.classList.remove('show');
     }
   });
 }
-
 
 // ===============================
 // SPA — Cambiar Pantallas
@@ -334,3 +321,4 @@ if(lightboxModal){
 renderFeaturedCarousel();
 renderCategoryProducts();
 renderCart();
+
