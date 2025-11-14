@@ -123,7 +123,9 @@ function addToCart(id){
 
   saveCart();
   renderCart();
-  openCart();  // 💥 ABRIR AUTOMÁTICAMENTE AL AGREGAR
+
+  // 💥 ABRIR CARRITO AUTOMÁTICAMENTE
+  cartEl.classList.remove('hidden');
 }
 
 function renderCart(){
@@ -301,3 +303,4 @@ if(lightboxModal) {
 renderFeaturedCarousel();
 renderCategoryProducts();
 renderCart();
+
