@@ -130,6 +130,10 @@ if (cartBtn && cartEl) {
 // AGREGAR AL CARRITO (abre carrito)
 // ===============================
 function addToCart(id){
+
+  // ➜ ABRE EL CARRITO SIEMPRE, PC y CEL
+  cartEl.classList.remove('hidden');
+
   const item = cart.find(i=>i.id===id);
   if(item) item.qty++;
   else {
@@ -321,4 +325,5 @@ if(lightboxModal){
 renderFeaturedCarousel();
 renderCategoryProducts();
 renderCart();
+
 
