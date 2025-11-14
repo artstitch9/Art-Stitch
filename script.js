@@ -3,9 +3,8 @@
 // ===============================
 document.addEventListener("touchstart", function(){}, true);
 
-
 // ===============================
-// MENU (PC + CEL sin parpadeo)
+// MENU FIJO — PC + CEL sin parpadeo
 // ===============================
 const menuBtn = document.querySelector('.menu-btn');
 const menuOverlay = document.querySelector('.menu-overlay');
@@ -13,23 +12,34 @@ const menuOverlay = document.querySelector('.menu-overlay');
 if(menuBtn && menuOverlay){
 
   const toggleMenu = (e)=>{
+    e.preventDefault();
     e.stopPropagation();
     menuOverlay.classList.toggle('show');
   };
 
-  menuBtn.addEventListener('pointerup', toggleMenu);
+  // PC
+  menuBtn.addEventListener('click', toggleMenu);
 
-  // evitar cerrar tocando adentro
-  menuOverlay.querySelector('ul').addEventListener('pointerup', e => e.stopPropagation());
+  // CELULAR (Android + iPhone)
+  menuBtn.addEventListener('touchend', toggleMenu);
 
-  // cerrar tocando afuera
-  document.addEventListener('pointerup', (e)=>{
+  // No cerrar si tocan adentro
+  menuOverlay.querySelector('ul').addEventListener('click', e => e.stopPropagation());
+  menuOverlay.querySelector('ul').addEventListener('touchend', e => e.stopPropagation());
+
+  // Cerrar tocando afuera
+  document.addEventListener('click', (e)=>{
+    if(!menuOverlay.contains(e.target) && e.target !== menuBtn){
+      menuOverlay.classList.remove('show');
+    }
+  });
+
+  document.addEventListener('touchend', (e)=>{
     if(!menuOverlay.contains(e.target) && e.target !== menuBtn){
       menuOverlay.classList.remove('show');
     }
   });
 }
-
 
 // ===============================
 // SPA — Cambiar Pantallas
@@ -329,3 +339,4 @@ if(lightboxModal){
 renderFeaturedCarousel();
 renderCategoryProducts();
 renderCart();
+
