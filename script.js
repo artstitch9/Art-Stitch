@@ -62,11 +62,11 @@ function saveCart(){ localStorage.setItem('artstitch_cart', JSON.stringify(cart)
 function formatMoney(n){ return Number(n).toLocaleString('es-AR'); }
 
 // ===============================
-// CARRITO — FUNCIONA EN CELULAR Y PC
+// CARRITO — VERSION FIJA
 // ===============================
-if(cartBtn && cartEl){
+if (cartBtn && cartEl) {
 
-  // abrir/cerrar carrito
+  // Abrir/cerrar carrito solo si NO se hace click afuera
   const toggleCart = (e)=>{
     e.stopPropagation();
     cartEl.classList.toggle('hidden');
@@ -75,13 +75,22 @@ if(cartBtn && cartEl){
   cartBtn.addEventListener('click', toggleCart);
   cartBtn.addEventListener('touchstart', toggleCart);
 
-  // evitar cerrar tocando adentro
+  // No cerrar si tocás adentro del carrito
   cartEl.addEventListener('click', e => e.stopPropagation());
   cartEl.addEventListener('touchstart', e => e.stopPropagation());
 
-  // cerrar carrito tocando afuera
-  document.addEventListener('click', ()=> cartEl.classList.add('hidden'));
-  document.addEventListener('touchstart', ()=> cartEl.classList.add('hidden'));
+  // Cerrar si tocás afuera
+  document.addEventListener('click', (e)=>{
+    if(!cartEl.contains(e.target) && !cartBtn.contains(e.target)){
+      cartEl.classList.add('hidden');
+    }
+  });
+
+  document.addEventListener('touchstart', (e)=>{
+    if(!cartEl.contains(e.target) && !cartBtn.contains(e.target)){
+      cartEl.classList.add('hidden');
+    }
+  });
 }
 
 function addToCart(id){
@@ -144,7 +153,7 @@ mpBtn.addEventListener('click', ()=> window.open(MERCADO_PAGO_LINK,'_blank'));
 transferBtn.addEventListener('click', ()=> transferInfo.classList.toggle('hidden'));
 
 // ===============================
-// CARRUSEL (funciona igual)
+// CARRUSEL
 // ===============================
 function renderFeaturedCarousel(){
   const carouselEl = document.querySelector('#featured-carousel .carousel');
