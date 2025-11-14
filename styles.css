@@ -102,3 +102,38 @@ p{line-height:1.5}
   .lightbox-prev{left:10px}
   .lightbox-next{right:10px}
 }
+
+/* HEADER DE LA PÁGINA */
+.hero-header {
+  background: #f3e8dc;    /* color suave estilo artesanal – lo podés cambiar */
+  padding: 30px 20px;
+  text-align: center;
+  border-bottom: 2px solid #d5c1b1;
+}
+
+.hero-logo {
+  width: 110px;
+  height: auto;
+  object-fit: contain;
+}
+
+@media (max-width: 600px) {
+  .hero-logo {
+    width: 80px;
+  }
+}
+
+.hero-title {
+  font-family: 'Georgia', serif;
+  font-size: 2.5rem;
+  margin: 10px 0 0 0;
+  color: #4a3b2f;
+}
+
+.hero-subtitle {
+  font-family: 'Georgia', serif;
+  font-size: 1.1rem;
+  margin-top: 5px;
+  color: #6b5c4f;
+  letter-spacing: 1px;
+}
