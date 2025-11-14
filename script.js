@@ -1,7 +1,8 @@
 // ===============================
-// FIX TOUCH PARA CELULAR
+// FIX PARA CLICK EN CELULAR (no borrar)
 // ===============================
 document.addEventListener("touchstart", function(){}, true);
+
 
 // ===============================
 // MENU (PC + CEL sin parpadeo)
@@ -10,31 +11,28 @@ const menuBtn = document.querySelector('.menu-btn');
 const menuOverlay = document.querySelector('.menu-overlay');
 
 if(menuBtn && menuOverlay){
-  
+
   const toggleMenu = (e)=>{
     e.stopPropagation();
     menuOverlay.classList.toggle('show');
   };
 
-  // Abrir menú
-  menuBtn.addEventListener('click', toggleMenu);
-  menuBtn.addEventListener('touchend', toggleMenu);
+  menuBtn.addEventListener('pointerup', toggleMenu);
 
-  // Evitar cierre si tocamos dentro
-  menuOverlay.querySelector('ul').addEventListener('click', e => e.stopPropagation());
+  // evitar cerrar tocando adentro
+  menuOverlay.querySelector('ul').addEventListener('pointerup', e => e.stopPropagation());
 
-  // Cerrar tocando afuera
-  document.addEventListener('click', ()=>{
-    menuOverlay.classList.remove('show');
-  });
-
-  document.addEventListener('touchend', ()=>{
-    menuOverlay.classList.remove('show');
+  // cerrar tocando afuera
+  document.addEventListener('pointerup', (e)=>{
+    if(!menuOverlay.contains(e.target) && e.target !== menuBtn){
+      menuOverlay.classList.remove('show');
+    }
   });
 }
 
+
 // ===============================
-// SPA — Cambiar pantallas
+// SPA — Cambiar Pantallas
 // ===============================
 const screens = document.querySelectorAll('.screen');
 const menuItems = document.querySelectorAll('.menu-overlay a');
@@ -46,8 +44,9 @@ function showScreen(name) {
 }
 
 menuItems.forEach(item => {
-  item.addEventListener('click', () => showScreen(item.dataset.screen));
+  item.addEventListener('pointerup', () => showScreen(item.dataset.screen));
 });
+
 
 // ===============================
 // DATOS
@@ -77,6 +76,7 @@ const FEATURED = [
 
 let MERCADO_PAGO_LINK = "https://link.mercadopago.com.ar/artstitch";
 
+
 // ===============================
 // ELEMENTOS
 // ===============================
@@ -101,129 +101,110 @@ let cart = JSON.parse(localStorage.getItem('artstitch_cart') || '[]');
 let currentImages = [];
 let currentIndex = 0;
 
+
 // ===============================
-// UTILS
+// FUNCIONES UTILES
 // ===============================
 function saveCart(){ localStorage.setItem('artstitch_cart', JSON.stringify(cart)); }
 function formatMoney(n){ return Number(n).toLocaleString('es-AR'); }
 
+
 // ===============================
-// CARRITO (PC + CEL sin parpadeo)
+// CARRITO — PC + CEL SIN PARPADEO
 // ===============================
 if(cartBtn && cartEl){
-
-  const openCart = ()=>{
-    cartEl.classList.remove('hidden');
-  };
 
   const toggleCart = (e)=>{
     e.stopPropagation();
     cartEl.classList.toggle('hidden');
   };
 
-  cartBtn.addEventListener('click', toggleCart);
-  cartBtn.addEventListener('touchend', toggleCart);
+  cartBtn.addEventListener('pointerup', toggleCart);
 
-  cartEl.addEventListener('click', e => e.stopPropagation());
-  cartEl.addEventListener('touchend', e => e.stopPropagation());
+  cartEl.addEventListener('pointerup', e => e.stopPropagation());
 
-  document.addEventListener('click', (e)=>{
+  document.addEventListener('pointerup', (e)=>{
     if(!cartEl.contains(e.target) && !cartBtn.contains(e.target)){
       cartEl.classList.add('hidden');
     }
   });
-
-  document.addEventListener('touchend', (e)=>{
-    if(!cartEl.contains(e.target) && !cartBtn.contains(e.target)){
-      cartEl.classList.add('hidden');
-    }
-  });
-
-  // Para usar desde addToCart()
-  window.openCart = openCart;
 }
 
+
 // ===============================
-// AGREGAR AL CARRITO — Autoabrir PC + CEL
+// AGREGAR AL CARRITO (abre carrito)
 // ===============================
 function addToCart(id){
-
-  const existing = cart.find(i=>i.id === id);
-  if(existing) existing.qty++;
+  const item = cart.find(i=>i.id===id);
+  if(item) item.qty++;
   else {
-    const p = PRODUCTS.find(x => x.id === id);
+    const p = PRODUCTS.find(x=>x.id===id);
     cart.push({id:p.id, title:p.title, price:p.price, qty:1, img:p.images[0]});
   }
 
   saveCart();
   renderCart();
-  openCart();  // ← SIEMPRE abre en PC + CEL
+
+  // Abrir carrito automáticamente en PC + CEL
+  cartEl.classList.remove('hidden');
 }
 
+
 // ===============================
-// RENDER CARRITO
+// RENDER DEL CARRITO
 // ===============================
 function renderCart(){
-  cartItemsEl.innerHTML = '';
-
-  if(cart.length === 0){
-    cartItemsEl.innerHTML = '<p class="small">Tu carrito está vacío.</p>';
-    cartTotalEl.textContent = '0';
+  cartItemsEl.innerHTML='';
+  if(cart.length===0){
+    cartItemsEl.innerHTML='<p class="small">Tu carrito está vacío.</p>';
+    cartTotalEl.textContent='0';
     return;
   }
-
   let total = 0;
-
   cart.forEach(ci=>{
     total += ci.price * ci.qty;
-
     const div = document.createElement('div');
-    div.className = 'cart-item';
-
-    div.innerHTML = `
-      <img src="${ci.img}">
+    div.className='cart-item';
+    div.innerHTML=`
+      <img src="${ci.img}" onerror="this.src='placeholder-product.png'">
       <div style="flex:1">
         <div style="font-weight:600">${ci.title}</div>
         <div class="small">$${formatMoney(ci.price)} x ${ci.qty}</div>
       </div>
       <div class="qty">
-        <button class="btn" onclick="changeQty('${ci.id}', -1)">-</button>
+        <button class="btn" onclick="changeQty('${ci.id}',-1)">-</button>
         <div style="min-width:20px;text-align:center">${ci.qty}</div>
-        <button class="btn" onclick="changeQty('${ci.id}', 1)">+</button>
+        <button class="btn" onclick="changeQty('${ci.id}',1)">+</button>
       </div>
     `;
     cartItemsEl.appendChild(div);
   });
-
   cartTotalEl.textContent = formatMoney(total);
 }
 
+
 window.changeQty = function(id, delta){
-  const it = cart.find(i=>i.id === id);
+  const it = cart.find(i=>i.id===id);
   if(!it) return;
-
   it.qty += delta;
-  if(it.qty <= 0){
-    cart = cart.filter(i=>i.id !== id);
-  }
-
+  if(it.qty <= 0) cart = cart.filter(i=>i.id!==id);
   saveCart();
   renderCart();
 };
 
+
 // ===============================
 // CHECKOUT
 // ===============================
-checkoutBtn.addEventListener('click', ()=>{
-  if(cart.length===0){
-    alert('El carrito está vacío.');
-    return;
-  }
+checkoutBtn.addEventListener('pointerup', ()=> {
+  if(cart.length===0){ alert('El carrito está vacío.'); return; }
   checkoutOptions.classList.toggle('hidden');
 });
 
-mpBtn.addEventListener('click', ()=> window.open(MERCADO_PAGO_LINK,'_blank'));
-transferBtn.addEventListener('click', ()=> transferInfo.classList.toggle('hidden'));
+mpBtn.addEventListener('pointerup', ()=> window.open(MERCADO_PAGO_LINK,'_blank'));
+
+transferBtn.addEventListener('pointerup', ()=> transferInfo.classList.toggle('hidden'));
+
 
 // ===============================
 // CARRUSEL
@@ -233,8 +214,8 @@ function renderFeaturedCarousel(){
   const dotsEl = document.querySelector('#featured-carousel .carousel-dots');
   if(!carouselEl) return;
 
-  carouselEl.innerHTML='';
-  dotsEl.innerHTML='';
+  carouselEl.innerHTML = '';
+  dotsEl.innerHTML = '';
 
   FEATURED.forEach((f,i)=>{
     const img = document.createElement('img');
@@ -244,81 +225,103 @@ function renderFeaturedCarousel(){
 
     const dot = document.createElement('span');
     if(i===0) dot.classList.add('active');
-    dot.addEventListener('click', ()=>{
+    dot.addEventListener('pointerup', ()=> {
       carouselEl.scrollLeft = img.offsetLeft;
       updateDots(i);
     });
     dotsEl.appendChild(dot);
   });
 
-  function updateDots(active){
+  function updateDots(activeIndex){
     dotsEl.querySelectorAll('span')
-      .forEach((d,i)=> d.classList.toggle('active', i===active));
+      .forEach((d,i)=> d.classList.toggle('active', i===activeIndex));
   }
+
+  carouselEl.addEventListener('scroll', ()=>{
+    const index = Math.round(carouselEl.scrollLeft / carouselEl.offsetWidth);
+    updateDots(index);
+  });
 }
+
 
 // ===============================
 // PRODUCTOS
 // ===============================
 function renderCategoryProducts(){
-  const category = document.getElementById('category-products');
-  if(!category) return;
+  const categoryEl = document.getElementById('category-products');
+  if(!categoryEl) return;
 
-  category.innerHTML='';
-
+  categoryEl.innerHTML='';
   PRODUCTS.forEach(p=>{
     const card = document.createElement('article');
     card.className='card';
-
-    card.innerHTML = `
+    card.innerHTML=`
       <div class="product-images">
-        ${p.images.map(src => `<img src="${src}" alt="${p.title}">`).join('')}
+        ${p.images.map(src=>`<img src="${src}" alt="${p.title}">`).join('')}
       </div>
       <h3>${p.title}</h3>
       <p class="small">${p.desc}</p>
       <div class="price">$${formatMoney(p.price)}</div>
       <button class="btn" onclick="addToCart('${p.id}')">Agregar al carrito</button>
     `;
-
-    category.appendChild(card);
+    categoryEl.appendChild(card);
   });
-
   initLightbox();
 }
+
 
 // ===============================
 // LIGHTBOX
 // ===============================
-function initLightbox(){
-  document.querySelectorAll('.product-images img').forEach(img=>{
-    img.addEventListener('click', ()=>{
+function initLightbox() {
+  document.querySelectorAll('.product-images img').forEach((img)=>{
+    img.addEventListener('pointerup', ()=>{
       const card = img.closest('.card');
-      const title = card.querySelector('h3').textContent;
-      const product = PRODUCTS.find(p=>p.title === title);
+      const productTitle = card.querySelector('h3').textContent;
+
+      const product = PRODUCTS.find(p => p.title === productTitle);
+      if(!product) return;
 
       currentImages = product.images;
-      currentIndex = currentImages.indexOf(img.src.split('/').pop());
-      if(currentIndex < 0) currentIndex=0;
 
-      lightboxImg.src = currentImages[currentIndex];
-      lightboxModal.classList.remove('hidden');
+      const filename = img.src.split('/').pop();
+      currentIndex = currentImages.indexOf(filename);
+      if(currentIndex < 0) currentIndex = 0;
+
+      openLightbox(currentImages[currentIndex]);
     });
   });
 }
 
-lightboxClose.addEventListener('click', ()=> lightboxModal.classList.add('hidden'));
-lightboxPrev.addEventListener('click', ()=>{
+function openLightbox(src){
+  lightboxImg.src = src;
+  lightboxModal.classList.remove('hidden');
+}
+
+function closeLightbox(){
+  lightboxModal.classList.add('hidden');
+}
+
+function showPrev(){
   currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
   lightboxImg.src = currentImages[currentIndex];
-});
-lightboxNext.addEventListener('click', ()=>{
+}
+
+function showNext(){
   currentIndex = (currentIndex + 1) % currentImages.length;
   lightboxImg.src = currentImages[currentIndex];
-});
+}
 
-lightboxModal.addEventListener('click', e=>{
-  if(e.target === lightboxModal) lightboxModal.classList.add('hidden');
-});
+if(lightboxClose) lightboxClose.addEventListener('pointerup', closeLightbox);
+if(lightboxPrev)  lightboxPrev.addEventListener('pointerup', showPrev);
+if(lightboxNext)  lightboxNext.addEventListener('pointerup', showNext);
+
+if(lightboxModal){
+  lightboxModal.addEventListener('pointerup', e=>{
+    if(e.target === lightboxModal) closeLightbox();
+  });
+}
+
 
 // ===============================
 // INIT
