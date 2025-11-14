@@ -1,9 +1,11 @@
-// ====== FIX PARA QUE EL CLICK FUNCIONE EN CELULAR ======
+// ===============================
+// FIX PARA CLICK EN CELULAR
+// ===============================
 document.addEventListener("touchstart", function(){}, true);
 
-// =========================================
-// =============== DATOS ===================
-// =========================================
+// ===============================
+// DATOS
+// ===============================
 const PRODUCTS = [
   {
     id: 'gorro-crudo',
@@ -29,10 +31,9 @@ const FEATURED = [
 
 let MERCADO_PAGO_LINK = "https://link.mercadopago.com.ar/artstitch";
 
-
-// =========================================
-// =============== ELEMENTOS ===============
-// =========================================
+// ===============================
+// ELEMENTOS
+// ===============================
 const cartItemsEl = document.getElementById('cart-items');
 const cartTotalEl = document.getElementById('cart-total');
 const checkoutBtn = document.getElementById('checkout-btn');
@@ -43,8 +44,6 @@ const transferInfo = document.getElementById('transfer-info');
 
 const cartEl = document.getElementById('cart');
 const cartBtn = document.querySelector('.cart-btn');
-const menuBtn = document.querySelector('.menu-btn');
-const menuOverlay = document.querySelector('.menu-overlay');
 
 const lightboxModal = document.getElementById('lightboxModal');
 const lightboxImg = document.getElementById('lightboxImg');
@@ -56,61 +55,33 @@ let cart = JSON.parse(localStorage.getItem('artstitch_cart') || '[]');
 let currentImages = [];
 let currentIndex = 0;
 
-
-// =========================================
-// =============== FUNCIONES ===============
-// =========================================
+// ===============================
+// FUNCIONES BASICAS
+// ===============================
 function saveCart(){ localStorage.setItem('artstitch_cart', JSON.stringify(cart)); }
 function formatMoney(n){ return Number(n).toLocaleString('es-AR'); }
 
-
-// =========================================
-// =============== MENÚ SPA ================
-// =========================================
-menuBtn.addEventListener('click', () => menuOverlay.classList.toggle('show'));
-
-menuOverlay.addEventListener('click', e => {
-  if(e.target === menuOverlay) menuOverlay.classList.remove('show');
-});
-
-// 💥 ESTA ES LA PARTE CLAVE QUE TE ARREGLA EL MAILTO
-menuOverlay.querySelectorAll("a").forEach(link => {
-  link.addEventListener("click", e => {
-
-    // enlaces externos → dejarlos funcionar
-    if (
-      link.href.startsWith("mailto:") ||
-      link.href.startsWith("https://") ||
-      link.href.startsWith("http://") ||
-      link.href.startsWith("tel:")
-    ) {
-      return; // NO BLOQUEAMOS
-    }
-
-    // enlaces internos → SPA
-    e.preventDefault();
-    const screen = link.dataset.screen;
-    if (screen) {
-      document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
-      document.getElementById(`screen-${screen}`).classList.remove("hidden");
-    }
-
-    menuOverlay.classList.remove("show");
-  });
-});
-
-
-// =========================================
-// =============== CARRITO =================
-// =========================================
+// ===============================
+// CARRITO — FUNCIONA EN CELULAR Y PC
+// ===============================
 if(cartBtn && cartEl){
-  cartBtn.addEventListener('click', (e)=>{
+
+  // abrir/cerrar carrito
+  const toggleCart = (e)=>{
     e.stopPropagation();
     cartEl.classList.toggle('hidden');
-  });
+  };
 
-  // Evita que tocar adentro del carrito lo cierre
+  cartBtn.addEventListener('click', toggleCart);
+  cartBtn.addEventListener('touchstart', toggleCart);
+
+  // evitar cerrar tocando adentro
   cartEl.addEventListener('click', e => e.stopPropagation());
+  cartEl.addEventListener('touchstart', e => e.stopPropagation());
+
+  // cerrar carrito tocando afuera
+  document.addEventListener('click', ()=> cartEl.classList.add('hidden'));
+  document.addEventListener('touchstart', ()=> cartEl.classList.add('hidden'));
 }
 
 function addToCart(id){
@@ -126,21 +97,16 @@ function addToCart(id){
 
 function renderCart(){
   cartItemsEl.innerHTML='';
-  
   if(cart.length===0){
     cartItemsEl.innerHTML='<p class="small">Tu carrito está vacío.</p>';
     cartTotalEl.textContent='0';
     return;
   }
-
   let total = 0;
-
   cart.forEach(ci=>{
     total += ci.price * ci.qty;
-
     const div = document.createElement('div');
     div.className='cart-item';
-
     div.innerHTML=`
       <img src="${ci.img}" onerror="this.src='placeholder-product.png'">
       <div style="flex:1">
@@ -153,43 +119,33 @@ function renderCart(){
         <button class="btn" onclick="changeQty('${ci.id}',1)">+</button>
       </div>
     `;
-
     cartItemsEl.appendChild(div);
   });
-
   cartTotalEl.textContent = formatMoney(total);
 }
 
 window.changeQty = function(id, delta){
   const it = cart.find(i=>i.id===id);
   if(!it) return;
-
   it.qty += delta;
   if(it.qty <= 0) cart = cart.filter(i=>i.id!==id);
-
   saveCart();
   renderCart();
-};
+}
 
-
-// =========================================
-// =============== CHECKOUT =================
-// =========================================
+// ===============================
+// CHECKOUT
+// ===============================
 checkoutBtn.addEventListener('click', ()=> {
-  if(cart.length===0){
-    alert('El carrito está vacío.');
-    return;
-  }
+  if(cart.length===0){ alert('El carrito está vacío.'); return; }
   checkoutOptions.classList.toggle('hidden');
 });
-
 mpBtn.addEventListener('click', ()=> window.open(MERCADO_PAGO_LINK,'_blank'));
 transferBtn.addEventListener('click', ()=> transferInfo.classList.toggle('hidden'));
 
-
-// =========================================
-// ============ CARRUSEL DESTACADOS =========
-// =========================================
+// ===============================
+// CARRUSEL (funciona igual)
+// ===============================
 function renderFeaturedCarousel(){
   const carouselEl = document.querySelector('#featured-carousel .carousel');
   const dotsEl = document.querySelector('#featured-carousel .carousel-dots');
@@ -206,12 +162,10 @@ function renderFeaturedCarousel(){
 
     const dot = document.createElement('span');
     if(i===0) dot.classList.add('active');
-
     dot.addEventListener('click', ()=> {
       carouselEl.scrollLeft = img.offsetLeft;
       updateDots(i);
     });
-
     dotsEl.appendChild(dot);
   });
 
@@ -226,20 +180,17 @@ function renderFeaturedCarousel(){
   });
 }
 
-
-// =========================================
-// =============== PRODUCTOS ================
-// =========================================
+// ===============================
+// PRODUCTOS
+// ===============================
 function renderCategoryProducts(){
   const categoryEl = document.getElementById('category-products');
   if(!categoryEl) return;
 
   categoryEl.innerHTML='';
-
   PRODUCTS.forEach(p=>{
     const card = document.createElement('article');
     card.className='card';
-
     card.innerHTML=`
       <div class="product-images">
         ${p.images.map(src=>`<img src="${src}" alt="${p.title}">`).join('')}
@@ -249,17 +200,14 @@ function renderCategoryProducts(){
       <div class="price">$${formatMoney(p.price)}</div>
       <button class="btn" onclick="addToCart('${p.id}')">Agregar al carrito</button>
     `;
-
     categoryEl.appendChild(card);
   });
-
   initLightbox();
 }
 
-
-// =========================================
-// =============== LIGHTBOX =================
-// =========================================
+// ===============================
+// LIGHTBOX
+// ===============================
 function initLightbox() {
   document.querySelectorAll('.product-images img').forEach((img)=>{
     img.addEventListener('click', ()=>{
@@ -271,8 +219,8 @@ function initLightbox() {
 
       currentImages = product.images;
 
-      const file = img.src.split('/').pop();
-      currentIndex = currentImages.indexOf(file);
+      const filename = img.src.split('/').pop();
+      currentIndex = currentImages.indexOf(filename);
       if(currentIndex < 0) currentIndex = 0;
 
       openLightbox(currentImages[currentIndex]);
@@ -290,13 +238,11 @@ function closeLightbox(){
 }
 
 function showPrev(){
-  if(currentImages.length === 0) return;
   currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
   lightboxImg.src = currentImages[currentIndex];
 }
 
 function showNext(){
-  if(currentImages.length === 0) return;
   currentIndex = (currentIndex + 1) % currentImages.length;
   lightboxImg.src = currentImages[currentIndex];
 }
@@ -304,18 +250,15 @@ function showNext(){
 if(lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
 if(lightboxPrev) lightboxPrev.addEventListener('click', showPrev);
 if(lightboxNext) lightboxNext.addEventListener('click', showNext);
-
-if(lightboxModal){
-  lightboxModal.addEventListener('click', e=>{
+if(lightboxModal) {
+  lightboxModal.addEventListener('click', e => {
     if(e.target === lightboxModal) closeLightbox();
   });
 }
 
-
-// =========================================
-// =============== INIT =====================
-// =========================================
+// ===============================
+// INIT
+// ===============================
 renderFeaturedCarousel();
 renderCategoryProducts();
 renderCart();
-
