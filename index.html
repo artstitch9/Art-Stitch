@@ -135,27 +135,11 @@
   <p>© Art Stitch</p>
 </footer>
 
-
-<!-- SPA JS -->
-<script>
-  const screens = document.querySelectorAll('.screen');
-  const menuItems = document.querySelectorAll('.menu-overlay a');
-
-  function showScreen(name) {
-    screens.forEach(s => s.classList.add('hidden'));
-    document.getElementById(`screen-${name}`).classList.remove('hidden');
-    document.querySelector('.menu-overlay').classList.remove('show');
-  }
-
-  menuItems.forEach(item => {
-    item.addEventListener('click', () => showScreen(item.dataset.screen));
-  });
-</script>
-
 <script src="script.js"></script>
 
 </body>
 </html>
+
 
 
 
