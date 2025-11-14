@@ -1,3 +1,6 @@
+// ====== FIX PARA QUE EL CLICK FUNCIONE EN CELULAR ======
+document.addEventListener("touchstart", function(){}, true);
+
 // =========================================
 // =============== DATOS ===================
 // =========================================
@@ -100,7 +103,15 @@ menuOverlay.querySelectorAll("a").forEach(link => {
 // =========================================
 // =============== CARRITO =================
 // =========================================
-cartBtn.addEventListener('click', ()=> cartEl.classList.toggle('hidden'));
+if(cartBtn && cartEl){
+  cartBtn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    cartEl.classList.toggle('hidden');
+  });
+
+  // Evita que tocar adentro del carrito lo cierre
+  cartEl.addEventListener('click', e => e.stopPropagation());
+}
 
 function addToCart(id){
   const item = cart.find(i=>i.id===id);
@@ -307,3 +318,4 @@ if(lightboxModal){
 renderFeaturedCarousel();
 renderCategoryProducts();
 renderCart();
+
