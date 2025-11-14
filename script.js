@@ -1,7 +1,7 @@
 // ===============================
 // FIX PARA CLICK EN CELULAR
 // ===============================
-document.addEventListener("touchstart", function(){}, true);
+document.addEventListener("touchstart", ()=>{}, false);
 
 // ===============================
 // DATOS
@@ -62,58 +62,84 @@ function saveCart(){ localStorage.setItem('artstitch_cart', JSON.stringify(cart)
 function formatMoney(n){ return Number(n).toLocaleString('es-AR'); }
 
 // ===============================
-// CARRITO — VERSION FIJA
+// CARRITO — FUNCIONA EN CELULAR Y PC
 // ===============================
-if (cartBtn && cartEl) {
 
-  // Abrir/cerrar carrito solo si NO se hace click afuera
-  const toggleCart = (e)=>{
-    e.stopPropagation();
-    cartEl.classList.toggle('hidden');
-  };
+// mostrar carrito → remover hidden
+function openCart() {
+  cartEl.classList.remove('hidden');
+}
 
+// ocultar carrito → agregar hidden
+function closeCart() {
+  cartEl.classList.add('hidden');
+}
+
+// toggle con protección
+function toggleCart(e){
+  e.stopPropagation();
+  cartEl.classList.toggle('hidden');
+}
+
+if(cartBtn && cartEl){
   cartBtn.addEventListener('click', toggleCart);
   cartBtn.addEventListener('touchstart', toggleCart);
 
-  // No cerrar si tocás adentro del carrito
+  // NO cerrar tocando dentro del carrito
   cartEl.addEventListener('click', e => e.stopPropagation());
   cartEl.addEventListener('touchstart', e => e.stopPropagation());
 
-  // Cerrar si tocás afuera
+  // cerrar tocando afuera
   document.addEventListener('click', (e)=>{
     if(!cartEl.contains(e.target) && !cartBtn.contains(e.target)){
-      cartEl.classList.add('hidden');
+      closeCart();
     }
   });
 
   document.addEventListener('touchstart', (e)=>{
     if(!cartEl.contains(e.target) && !cartBtn.contains(e.target)){
-      cartEl.classList.add('hidden');
+      closeCart();
     }
   });
 }
 
+// ===============================
+// AGREGAR AL CARRITO
+// ===============================
 function addToCart(id){
   const item = cart.find(i=>i.id===id);
+
   if(item) item.qty++;
   else {
     const p = PRODUCTS.find(x=>x.id===id);
-    cart.push({id:p.id, title:p.title, price:p.price, qty:1, img:p.images[0]});
+    cart.push({
+      id:p.id,
+      title:p.title,
+      price:p.price,
+      qty:1,
+      img:p.images[0]
+    });
   }
+
   saveCart();
   renderCart();
+  openCart();  // 💥 ABRIR AUTOMÁTICAMENTE AL AGREGAR
 }
 
 function renderCart(){
   cartItemsEl.innerHTML='';
+
   if(cart.length===0){
     cartItemsEl.innerHTML='<p class="small">Tu carrito está vacío.</p>';
     cartTotalEl.textContent='0';
     return;
   }
+
   let total = 0;
+
   cart.forEach(ci=>{
     total += ci.price * ci.qty;
+
     const div = document.createElement('div');
     div.className='cart-item';
     div.innerHTML=`
@@ -130,14 +156,17 @@ function renderCart(){
     `;
     cartItemsEl.appendChild(div);
   });
+
   cartTotalEl.textContent = formatMoney(total);
 }
 
 window.changeQty = function(id, delta){
   const it = cart.find(i=>i.id===id);
   if(!it) return;
+
   it.qty += delta;
   if(it.qty <= 0) cart = cart.filter(i=>i.id!==id);
+
   saveCart();
   renderCart();
 }
@@ -211,6 +240,7 @@ function renderCategoryProducts(){
     `;
     categoryEl.appendChild(card);
   });
+
   initLightbox();
 }
 
