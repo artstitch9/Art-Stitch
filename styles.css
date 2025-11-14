@@ -160,6 +160,13 @@ p{line-height:1.5}
   background:var(--terracotta);
 }
 
+/* ====== CARRUSEL en CELULAR ====== */
+@media (max-width: 600px) {
+  #featured-carousel .carousel img{
+    height:260px;   /* Ajustá a gusto */
+  }
+}
+
 /* ====== SEPARADOR ====== */
 .separator{
   width:100%;
@@ -376,4 +383,5 @@ p{line-height:1.5}
   margin-top:40px;
   border-top:2px solid var(--terracotta);
 }
+
 
