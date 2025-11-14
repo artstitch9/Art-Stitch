@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Art Stitch</title>
 
-  <!-- FAVICON: poné en la raíz un archivo llamado "favicon.png" -->
+  <!-- FAVICON -->
   <link rel="icon" type="image/png" href="favicon.png">
 
   <link rel="stylesheet" href="styles.css">
@@ -16,10 +16,10 @@
 <button class="menu-btn">☰</button>
 <div class="menu-overlay">
   <ul>
-    <li data-screen="inicio">Inicio</li>
-    <li data-screen="productos">Productos</li>
-    <li data-screen="about">Sobre mí</li>
-    <li data-screen="contacto">Contacto</li>
+    <li><a href="#" data-screen="inicio">Inicio</a></li>
+    <li><a href="#" data-screen="productos">Productos</a></li>
+    <li><a href="#" data-screen="about">Sobre mí</a></li>
+    <li><a href="#" data-screen="contacto">Contacto</a></li>
   </ul>
 </div>
 
@@ -39,7 +39,7 @@
   <!-- SEPARADOR -->
   <div class="separator"></div>
 
-  <!-- SECCIÓN IMAGEN (la cargás vos) -->
+  <!-- SECCIÓN IMAGEN PRINCIPAL -->
   <section id="promo-image">
     <img src="" alt="" id="promo-img-placeholder">
   </section>
@@ -54,7 +54,6 @@
   </section>
 
 </section>
-
 
 
 <!-- ========================== -->
@@ -112,7 +111,7 @@
   </div>
 </aside>
 
-  <!-- LIGHTBOX -->
+<!-- LIGHTBOX -->
 <div id="lightboxModal" class="lightbox-modal hidden">
   <div class="lightbox-img-container">
     <button id="lightboxClose" class="close-detail">×</button>
@@ -132,7 +131,7 @@
 <!-- ========================== -->
 <script>
   const screens = document.querySelectorAll('.screen');
-  const menuItems = document.querySelectorAll('.menu-overlay ul li');
+  const menuItems = document.querySelectorAll('.menu-overlay a');
 
   function showScreen(name) {
     screens.forEach(s => s.classList.add('hidden'));
