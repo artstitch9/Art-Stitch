@@ -4,10 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Art Stitch</title>
-
-  <!-- FAVICON -->
   <link rel="icon" type="image/png" href="favicon.png">
-
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -20,6 +17,7 @@
     <li><a href="#" data-screen="productos">Productos</a></li>
     <li><a href="#" data-screen="about">Sobre mí</a></li>
     <li><a href="#" data-screen="contacto">Contacto</a></li>
+    <li><a href="#" data-screen="account">Mi cuenta</a></li>
   </ul>
 </div>
 
@@ -29,42 +27,30 @@
 <!-- PANTALLA INICIO -->
 <!-- ========================== -->
 <section id="screen-inicio" class="screen">
-
-  <!-- ENCABEZADO SUPERIOR -->
   <header class="hero-header">
     <img src="logo.png" alt="Art Stitch Logo" class="hero-logo">
     <h1 class="hero-title">Art Stitch</h1>
     <p class="hero-subtitle">tejidos artesanales</p>
   </header>
 
-  <!-- CARRUSEL DESTACADOS -->
   <section id="featured-carousel">
     <div class="carousel"></div>
     <div class="carousel-dots"></div>
   </section>
 
-  <!-- SEPARADOR -->
   <div class="separator"></div>
 
-  <!-- SECCIÓN IMAGEN (la cargás vos) -->
   <section id="promo-image">
     <img src="" alt="" id="promo-img-placeholder">
   </section>
 
-  <!-- SEPARADOR -->
   <div class="separator"></div>
 
-  <!-- CONTACTANOS -->
-<section id="mini-contact" class="mini-contact">
-  <h2>Contactanos</h2>
-  <a href="mailto:artstitich2025@gmail.com" class="mail-link">
-    artstitich2025@gmail.com
-  </a>
+  <section id="mini-contact" class="mini-contact">
+    <h2>Contactanos</h2>
+    <a href="mailto:artstitich2025@gmail.com" class="mail-link">artstitich2025@gmail.com</a>
+  </section>
 </section>
-
-</section>
-<!-- FIN PANTALLA INICIO -->
-
 
 <!-- ========================== -->
 <!-- PANTALLA PRODUCTOS -->
@@ -74,7 +60,6 @@
   <div id="category-products" class="products"></div>
 </section>
 
-
 <!-- ========================== -->
 <!-- PANTALLA CONTACTO -->
 <!-- ========================== -->
@@ -83,40 +68,75 @@
   <p>Podés poner redes, WhatsApp, Instagram, etc.</p>
 </section>
 
-
 <!-- ========================== -->
-<!-- PANTALLA SOBRE MI -->
+<!-- PANTALLA SOBRE MÍ -->
 <!-- ========================== -->
 <section id="screen-about" class="screen hidden">
   <h2>Sobre mí</h2>
   <p>Texto para editar y contar tu historia.</p>
 </section>
 
-</main>
+<!-- ========================== -->
+<!-- PANTALLA MI CUENTA (LINDA) -->
+<!-- ========================== -->
+<section id="screen-account" class="screen hidden" style="padding:30px; font-family:system-ui; color:#3a2e2a;">
+  <div style="max-width:600px; margin:0 auto; background:#faf7f5; border:1px solid #e8d4ce; border-radius:14px; padding:25px; box-shadow:0 4px 12px rgba(0,0,0,0.06);">
 
+    <h2 style="text-align:center; color:#a86652; font-size:28px; margin-bottom:20px;">Mi Cuenta</h2>
+
+    <!-- VISTA NO LOGUEADO -->
+    <div id="account-not-logged" style="text-align:center;">
+      <p style="font-size:15px; margin-bottom:20px;">Iniciá sesión o creá tu cuenta para ver tu historial de compras 💕</p>
+
+      <div style="background:white; border-radius:12px; padding:20px; border:1px solid #e8d4ce; margin-bottom:25px;">
+        <h3 style="color:#a86652; margin-bottom:15px;">Iniciar sesión</h3>
+        <input id="login-email" type="email" placeholder="Email" style="width:100%; padding:10px; border-radius:8px; border:1px solid #d3c2bb; margin-bottom:10px;">
+        <input id="login-pass" type="password" placeholder="Contraseña" style="width:100%; padding:10px; border-radius:8px; border:1px solid #d3c2bb; margin-bottom:15px;">
+        <button id="btn-login" style="background:#c77a63; color:white; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; width:100%;">Ingresar</button>
+      </div>
+
+      <div style="background:white; border-radius:12px; padding:20px; border:1px solid #e8d4ce;">
+        <h3 style="color:#a86652; margin-bottom:15px;">Crear cuenta</h3>
+        <input id="reg-name" type="text" placeholder="Nombre" style="width:100%; padding:10px; border-radius:8px; border:1px solid #d3c2bb; margin-bottom:10px;">
+        <input id="reg-email" type="email" placeholder="Email" style="width:100%; padding:10px; border-radius:8px; border:1px solid #d3c2bb; margin-bottom:10px;">
+        <input id="reg-pass" type="password" placeholder="Contraseña" style="width:100%; padding:10px; border-radius:8px; border:1px solid #d3c2bb; margin-bottom:15px;">
+        <button id="btn-register" style="background:#a86652; color:white; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; width:100%;">Crear cuenta</button>
+      </div>
+    </div>
+
+    <!-- VISTA LOGUEADO -->
+    <div id="account-logged" style="display:none;">
+      <h3 id="welcome-user" style="text-align:center; color:#a86652; margin-bottom:20px;"></h3>
+      <button id="btn-logout" style="background:#c77a63; color:white; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; width:100%; margin-bottom:25px;">Cerrar sesión</button>
+      <div style="background:white; border-radius:12px; padding:20px; border:1px solid #e8d4ce;">
+        <h3 style="color:#a86652; margin-bottom:15px;">Historial de compras</h3>
+        <div id="purchase-history" style="font-size:14px; color:#3a2e2a;"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</main>
 
 <!-- CARRITO -->
 <button class="cart-btn">🛒</button>
 <aside class="cart hidden" id="cart">
   <h2>Carrito</h2>
   <div id="cart-items"></div>
-
   <div class="cart-footer">
     <div class="cart-total">Total: $<span id="cart-total">0</span></div>
     <button id="checkout-btn" class="btn">Pagar</button>
   </div>
-
   <div id="checkout-options" class="checkout-options hidden">
     <h3>Elegí método de pago</h3>
     <button id="mp-btn" class="btn">Pagar con Mercado Pago</button>
     <button id="transfer-btn" class="btn alt">Transferencia</button>
-
     <div id="transfer-info" class="transfer-info hidden">
       <p><strong>Alias:</strong> Martu.Abril.cd</p>
       <p><strong>Nombre:</strong> Martina Abril Gonzalez</p>
       <p>Enviá comprobante por WhatsApp o Instagram.</p>
     </div>
-
     <p class="small">📦 El envío se coordina después de la compra.</p>
   </div>
 </aside>
@@ -139,7 +159,3 @@
 
 </body>
 </html>
-
-
-
-
