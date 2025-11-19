@@ -388,15 +388,33 @@ function updateAccountView() {
 
 document.getElementById("btn-register").addEventListener("pointerup", async () => {
   const name = document.getElementById("reg-name").value.trim();
+  const phone = document.getElementById("reg-phone").value.trim();
   const email = document.getElementById("reg-email").value.trim();
   const pass = document.getElementById("reg-pass").value.trim();
+  const address = document.getElementById("reg-address").value.trim();
+  const localidad = document.getElementById("reg-localidad").value.trim();
+  const provincia = document.getElementById("reg-provincia").value.trim();
+  const pais = document.getElementById("reg-pais").value.trim();
+  const cp = document.getElementById("reg-cp").value.trim();
 
   if (!email || !pass) return alert("Completá email y contraseña.");
+
+  const body = {
+    name,
+    phone,
+    email,
+    password: pass,
+    address,
+    localidad,
+    provincia,
+    pais,
+    cp
+  };
 
   const res = await fetch("http://localhost:3000/api/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password: pass, name })
+    body: JSON.stringify(body)
   });
 
   const data = await res.json();
@@ -467,4 +485,5 @@ async function cargarHistorial() {
 }
 
 updateAccountView();
+
 
