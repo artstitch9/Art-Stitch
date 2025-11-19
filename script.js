@@ -94,7 +94,6 @@ const checkoutBtn = document.getElementById('checkout-btn');
 const checkoutOptions = document.getElementById('checkout-options');
 const mpBtn = document.getElementById('mp-btn');
 const transferBtn = document.getElementById('transfer-btn');
-const transferInfo = document.getElementById('transfer-info');
 
 const cartEl = document.getElementById('cart');
 const cartBtn = document.querySelector('.cart-btn');
@@ -237,16 +236,8 @@ checkoutBtn.addEventListener('pointerup', ()=> {
   checkoutOptions.classList.toggle('hidden');
 });
 
-mpBtn.addEventListener('pointerup', ()=> window.open(MERCADO_PAGO_LINK,'_blank'));
-
-transferBtn.addEventListener('pointerup', ()=> {
-  transferInfo.classList.toggle('hidden');
-
-  const emailCliente = prompt("Ingresá tu email para confirmar la compra:");
-  if(emailCliente){
-    enviarCompraAlServidor(emailCliente);
-  }
-});
+mpBtn.addEventListener('pointerup', ()=> abrirModalEnvio("mp"));
+transferBtn.addEventListener('pointerup', ()=> abrirModalEnvio("transfer"));
 
 // ===============================
 // CARRUSEL
@@ -486,7 +477,52 @@ async function cargarHistorial() {
   `).join("");
 }
 
+// ===============================
+// MODAL DE ENVÍO
+// ===============================
+const modal = document.getElementById("shipping-modal");
+const closeModal = document.querySelector(".shipping-close");
+
+function abrirModalEnvio(tipoPago){
+  modal.dataset.metodo = tipoPago;  // "mp" o "transfer"
+  modal.classList.remove("hidden");
+}
+
+closeModal.addEventListener("pointerup", ()=> {
+  modal.classList.add("hidden");
+});
+
+document.getElementById("shipping-confirm").addEventListener("pointerup", ()=> {
+
+  const shippingData = {
+    name: document.getElementById("ship-name").value.trim(),
+    phone: document.getElementById("ship-phone").value.trim(),
+    address: document.getElementById("ship-address").value.trim(),
+    localidad: document.getElementById("ship-localidad").value.trim(),
+    provincia: document.getElementById("ship-provincia").value.trim(),
+    pais: document.getElementById("ship-pais").value.trim(),
+    cp: document.getElementById("ship-cp").value.trim(),
+  };
+
+  const rememberShipping = document.getElementById("ship-remember").checked;
+
+  // pedir email
+  const emailCliente = prompt("Ingresá tu email para confirmar la compra:");
+  if(!emailCliente) return;
+
+  enviarCompraAlServidor(emailCliente, shippingData, rememberShipping);
+
+  // cerrar modal
+  modal.classList.add("hidden");
+
+  // si el pago es por mp -> redirigir a MP
+  if(modal.dataset.metodo === "mp"){
+    window.open(MERCADO_PAGO_LINK,"_blank");
+  }
+});
+
 updateAccountView();
+
 
 
 
