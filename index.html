@@ -210,10 +210,46 @@
   <p>© Art Stitch</p>
 </footer>
 
+<!-- =========================== -->
+<!-- MODAL DE DATOS DE ENVÍO    -->
+<!-- =========================== -->
+<div id="shipping-modal" class="shipping-modal hidden">
+  <div class="shipping-box">
+
+    <button class="shipping-close">×</button>
+
+    <h3 class="shipping-title">Datos de envío</h3>
+    <p class="shipping-sub">
+      Completá esta información para coordinar tu envío ✨
+    </p>
+
+    <div class="shipping-grid">
+      <input id="ship-name" type="text" placeholder="Nombre completo">
+      <input id="ship-phone" type="text" placeholder="Teléfono">
+      <input id="ship-address" type="text" placeholder="Dirección">
+      <input id="ship-localidad" type="text" placeholder="Localidad">
+      <input id="ship-provincia" type="text" placeholder="Provincia">
+      <input id="ship-pais" type="text" placeholder="País">
+      <input id="ship-cp" type="text" placeholder="Código Postal">
+    </div>
+
+    <label style="margin-top:10px; display:flex; gap:6px; font-size:14px; color:#6b5c4f;">
+      <input type="checkbox" id="ship-remember">
+      Guardar estos datos para próximas compras
+    </label>
+
+    <button id="shipping-confirm" class="shipping-btn">
+      Confirmar y continuar
+    </button>
+
+  </div>
+</div>
+  
 <script src="script.js"></script>
 
 </body>
 </html>
+
 
 
 
