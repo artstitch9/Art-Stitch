@@ -199,11 +199,13 @@ window.changeQty = function(id, delta){
 // ===============================
 // ENVIAR COMPRA AL SERVIDOR (BREVO)
 // ===============================
-async function enviarCompraAlServidor(clienteEmail) {
+async function enviarCompraAlServidor(clienteEmail, shippingData, rememberShipping) {
   const body = {
     clienteEmail,
     items: cart,
-    total: Number(cartTotalEl.textContent.replace(/\./g, "")) 
+    total: Number(cartTotalEl.textContent.replace(/\./g, "")),
+    shippingData,
+    rememberShipping
   };
 
   try {
@@ -485,5 +487,6 @@ async function cargarHistorial() {
 }
 
 updateAccountView();
+
 
 
