@@ -367,4 +367,104 @@ renderFeaturedCarousel();
 renderCategoryProducts();
 renderCart();
 
+let token = localStorage.getItem("artstitch_token") || null;
+let userName = localStorage.getItem("artstitch_user") || null;
+
+function updateAccountView() {
+  const notLogged = document.getElementById("account-not-logged");
+  const logged = document.getElementById("account-logged");
+  const welcome = document.getElementById("welcome-user");
+
+  if (token) {
+    notLogged.style.display = "none";
+    logged.style.display = "block";
+    welcome.textContent = `Hola, ${userName} 💕`;
+    cargarHistorial();
+  } else {
+    notLogged.style.display = "block";
+    logged.style.display = "none";
+  }
+}
+
+document.getElementById("btn-register").addEventListener("pointerup", async () => {
+  const name = document.getElementById("reg-name").value.trim();
+  const email = document.getElementById("reg-email").value.trim();
+  const pass = document.getElementById("reg-pass").value.trim();
+
+  if (!email || !pass) return alert("Completá email y contraseña.");
+
+  const res = await fetch("http://localhost:3000/api/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password: pass, name })
+  });
+
+  const data = await res.json();
+
+  if (!data.ok) return alert(data.msg || "Error en registro.");
+
+  alert("Cuenta creada con éxito 💖 Ahora iniciá sesión.");
+});
+
+document.getElementById("btn-login").addEventListener("pointerup", async () => {
+  const email = document.getElementById("login-email").value.trim();
+  const pass = document.getElementById("login-pass").value.trim();
+
+  const res = await fetch("http://localhost:3000/api/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password: pass })
+  });
+
+  const data = await res.json();
+
+  if (!data.ok) return alert(data.msg || "Error al iniciar sesión.");
+
+  token = data.token;
+  userName = data.name;
+
+  localStorage.setItem("artstitch_token", token);
+  localStorage.setItem("artstitch_user", userName);
+
+  alert("Sesión iniciada 💕");
+
+  updateAccountView();
+});
+
+document.getElementById("btn-logout").addEventListener("pointerup", () => {
+  localStorage.removeItem("artstitch_token");
+  localStorage.removeItem("artstitch_user");
+  token = null;
+  userName = null;
+  updateAccountView();
+});
+
+async function cargarHistorial() {
+  if (!token) return;
+
+  const res = await fetch("http://localhost:3000/api/usuario", {
+    headers: { "Authorization": "Bearer " + token }
+  });
+
+  const data = await res.json();
+  const historyEl = document.getElementById("purchase-history");
+
+  if (!data.ok || data.compras.length === 0) {
+    historyEl.innerHTML = "<p>No tenés compras todavía 💖</p>";
+    return;
+  }
+
+  historyEl.innerHTML = data.compras.map(c => `
+    <div style='margin-bottom:12px; padding:10px; border:1px solid #e8d4ce; border-radius:8px; background:white;'>
+      <strong>Fecha:</strong> ${new Date(c.fecha).toLocaleString()}<br>
+      <strong>Total:</strong> $${c.total}<br>
+      <strong>Items:</strong>
+      <ul>
+        ${c.items.map(i => `<li>${i.title} x${i.qty}</li>`).join("")}
+      </ul>
+    </div>
+  `).join("");
+}
+
+updateAccountView();
 
