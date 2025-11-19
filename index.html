@@ -96,12 +96,45 @@
       </div>
 
       <div style="background:white; border-radius:12px; padding:20px; border:1px solid #e8d4ce;">
-        <h3 style="color:#a86652; margin-bottom:15px;">Crear cuenta</h3>
-        <input id="reg-name" type="text" placeholder="Nombre" style="width:100%; padding:10px; border-radius:8px; border:1px solid #d3c2bb; margin-bottom:10px;">
-        <input id="reg-email" type="email" placeholder="Email" style="width:100%; padding:10px; border-radius:8px; border:1px solid #d3c2bb; margin-bottom:10px;">
-        <input id="reg-pass" type="password" placeholder="Contraseña" style="width:100%; padding:10px; border-radius:8px; border:1px solid #d3c2bb; margin-bottom:15px;">
-        <button id="btn-register" style="background:#a86652; color:white; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; width:100%;">Crear cuenta</button>
-      </div>
+
+  <h3 style="color:#a86652; margin-bottom:15px;">Crear cuenta</h3>
+
+  <!-- CONTENEDOR DE DOS COLUMNAS -->
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+
+    <input id="reg-name" type="text" placeholder="Nombre" 
+      style="padding:10px; border-radius:8px; border:1px solid #d3c2bb;">
+
+    <input id="reg-phone" type="text" placeholder="Teléfono" 
+      style="padding:10px; border-radius:8px; border:1px solid #d3c2bb;">
+
+    <input id="reg-email" type="email" placeholder="Email"
+      style="padding:10px; border-radius:8px; border:1px solid #d3c2bb;">
+
+    <input id="reg-pass" type="password" placeholder="Contraseña"
+      style="padding:10px; border-radius:8px; border:1px solid #d3c2bb;">
+
+    <input id="reg-address" type="text" placeholder="Dirección"
+      style="padding:10px; border-radius:8px; border:1px solid #d3c2bb; grid-column:1 / span 2;">
+
+    <input id="reg-localidad" type="text" placeholder="Localidad"
+      style="padding:10px; border-radius:8px; border:1px solid #d3c2bb;">
+
+    <input id="reg-provincia" type="text" placeholder="Provincia"
+      style="padding:10px; border-radius:8px; border:1px solid #d3c2bb;">
+
+    <input id="reg-pais" type="text" placeholder="País"
+      style="padding:10px; border-radius:8px; border:1px solid #d3c2bb;">
+
+    <input id="reg-cp" type="text" placeholder="Código Postal"
+      style="padding:10px; border-radius:8px; border:1px solid #d3c2bb;">
+  </div>
+
+  <button id="btn-register"
+    style="background:#a86652; color:white; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; width:100%; margin-top:15px;">
+    Crear cuenta
+  </button>
+</div>
 
 <p style="
   margin-top:18px;
@@ -181,5 +214,6 @@
 
 </body>
 </html>
+
 
 
