@@ -57,7 +57,6 @@ menuItems.forEach(item => {
   item.addEventListener('pointerup', () => showScreen(item.dataset.screen));
 });
 
-
 // ===============================
 // DATOS
 // ===============================
@@ -86,7 +85,6 @@ const FEATURED = [
 
 let MERCADO_PAGO_LINK = "https://link.mercadopago.com.ar/artstitch";
 
-
 // ===============================
 // ELEMENTOS
 // ===============================
@@ -111,13 +109,11 @@ let cart = JSON.parse(localStorage.getItem('artstitch_cart') || '[]');
 let currentImages = [];
 let currentIndex = 0;
 
-
 // ===============================
 // FUNCIONES UTILES
 // ===============================
 function saveCart(){ localStorage.setItem('artstitch_cart', JSON.stringify(cart)); }
 function formatMoney(n){ return Number(n).toLocaleString('es-AR'); }
-
 
 // ===============================
 // CARRITO — PC + CEL SIN PARPADEO
@@ -140,7 +136,6 @@ if(cartBtn && cartEl){
   });
 }
 
-
 // ===============================
 // AGREGAR AL CARRITO (abre carrito)
 // ===============================
@@ -158,7 +153,6 @@ function addToCart(id){
   // Abrir carrito automáticamente en PC + CEL
   cartEl.classList.remove('hidden');
 }
-
 
 // ===============================
 // RENDER DEL CARRITO
@@ -202,6 +196,36 @@ window.changeQty = function(id, delta){
   renderCart();
 };
 
+// ===============================
+// ENVIAR COMPRA AL SERVIDOR (BREVO)
+// ===============================
+async function enviarCompraAlServidor(clienteEmail) {
+  const body = {
+    clienteEmail,
+    items: cart,
+    total: Number(cartTotalEl.textContent.replace(/\./g, "")) 
+  };
+
+  try {
+    const res = await fetch("http://localhost:3000/api/compra", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+
+    const data = await res.json();
+    console.log("Respuesta del servidor:", data);
+
+    if (data.ok) {
+      alert("¡Compra procesada! Revisá tu email 💌");
+    } else {
+      alert("Hubo un problema enviando los mails.");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Error de conexión con el servidor.");
+  }
+}
 
 // ===============================
 // CHECKOUT
@@ -213,8 +237,14 @@ checkoutBtn.addEventListener('pointerup', ()=> {
 
 mpBtn.addEventListener('pointerup', ()=> window.open(MERCADO_PAGO_LINK,'_blank'));
 
-transferBtn.addEventListener('pointerup', ()=> transferInfo.classList.toggle('hidden'));
+transferBtn.addEventListener('pointerup', ()=> {
+  transferInfo.classList.toggle('hidden');
 
+  const emailCliente = prompt("Ingresá tu email para confirmar la compra:");
+  if(emailCliente){
+    enviarCompraAlServidor(emailCliente);
+  }
+});
 
 // ===============================
 // CARRUSEL
@@ -253,7 +283,6 @@ function renderFeaturedCarousel(){
   });
 }
 
-
 // ===============================
 // PRODUCTOS
 // ===============================
@@ -278,7 +307,6 @@ function renderCategoryProducts(){
   });
   initLightbox();
 }
-
 
 // ===============================
 // LIGHTBOX
@@ -332,11 +360,11 @@ if(lightboxModal){
   });
 }
 
-
 // ===============================
 // INIT
 // ===============================
 renderFeaturedCarousel();
 renderCategoryProducts();
 renderCart();
+
 
