@@ -363,6 +363,8 @@ renderCart();
 let token = localStorage.getItem("artstitch_token") || null;
 let userName = localStorage.getItem("artstitch_user") || null;
 
+let userData = null;
+
 function updateAccountView() {
   const notLogged = document.getElementById("account-not-logged");
   const logged = document.getElementById("account-logged");
@@ -412,6 +414,8 @@ document.getElementById("btn-register").addEventListener("pointerup", async () =
 
   const data = await res.json();
 
+  userData = data; 
+
   if (!data.ok) return alert(data.msg || "Error en registro.");
 
   alert("Cuenta creada con éxito 💖 Ahora iniciá sesión.");
@@ -433,6 +437,8 @@ document.getElementById("btn-login").addEventListener("pointerup", async () => {
 
   token = data.token;
   userName = data.name;
+
+  userData = data.user || null;
 
   localStorage.setItem("artstitch_token", token);
   localStorage.setItem("artstitch_user", userName);
@@ -484,8 +490,20 @@ const modal = document.getElementById("shipping-modal");
 const closeModal = document.querySelector(".shipping-close");
 
 function abrirModalEnvio(tipoPago){
-  modal.dataset.metodo = tipoPago;  // "mp" o "transfer"
+
+  modal.dataset.metodo = tipoPago;  
   modal.classList.remove("hidden");
+
+  // Autocompletar si hay usuario logueado con datos guardados
+  if (userData) {
+    document.getElementById("ship-name").value      = userData.name || "";
+    document.getElementById("ship-phone").value     = userData.phone || "";
+    document.getElementById("ship-address").value   = userData.address || "";
+    document.getElementById("ship-localidad").value = userData.localidad || "";
+    document.getElementById("ship-provincia").value = userData.provincia || "";
+    document.getElementById("ship-pais").value      = userData.pais || "";
+    document.getElementById("ship-cp").value        = userData.cp || "";
+  }
 }
 
 closeModal.addEventListener("pointerup", ()=> {
@@ -522,6 +540,7 @@ document.getElementById("shipping-confirm").addEventListener("pointerup", ()=> {
 });
 
 updateAccountView();
+
 
 
 
