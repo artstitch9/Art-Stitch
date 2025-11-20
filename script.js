@@ -456,7 +456,7 @@ document.getElementById("btn-logout").addEventListener("pointerup", () => {
 async function cargarHistorial() {
   if (!token) return;
 
-  const res = await fetch("http://localhost:3000/api/usuario", {
+  const res = await fetch("https://backend-artstitch.onrender.com", {
     headers: { "Authorization": "Bearer " + token }
   });
 
@@ -539,6 +539,7 @@ document.getElementById("shipping-confirm").addEventListener("pointerup", ()=> {
 });
 
 updateAccountView();
+
 
 
 
