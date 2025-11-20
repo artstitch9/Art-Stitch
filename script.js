@@ -495,6 +495,7 @@ function abrirModalEnvio(tipoPago){
   if (userData) {
     document.getElementById("ship-name").value      = userData.name || "";
     document.getElementById("ship-phone").value     = userData.phone || "";
+    document.getElementById("ship-email").value     = userData.email || "";
     document.getElementById("ship-address").value   = userData.address || "";
     document.getElementById("ship-localidad").value = userData.localidad || "";
     document.getElementById("ship-provincia").value = userData.provincia || "";
@@ -538,6 +539,7 @@ document.getElementById("shipping-confirm").addEventListener("pointerup", ()=> {
 });
 
 updateAccountView();
+
 
 
 
