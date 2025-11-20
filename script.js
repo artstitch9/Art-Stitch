@@ -521,25 +521,24 @@ document.getElementById("shipping-confirm").addEventListener("pointerup", ()=> {
 
   const rememberShipping = document.getElementById("ship-remember").checked;
 
-  // pedir email
+  // ⭐ AHORA SÍ TOMA EL EMAIL DEL INPUT
   const emailCliente = document.getElementById("ship-email").value.trim();
-if(!emailCliente) {
-  alert("Ingresá el email para recibir la confirmación 💌");
-  return;
-}
+  if(!emailCliente){
+    alert("Ingresá tu correo para recibir la confirmación 💌");
+    return;
+  }
 
   enviarCompraAlServidor(emailCliente, shippingData, rememberShipping);
 
-  // cerrar modal
   modal.classList.add("hidden");
 
-  // si el pago es por mp -> redirigir a MP
   if(modal.dataset.metodo === "mp"){
     window.open(MERCADO_PAGO_LINK,"_blank");
   }
 });
 
 updateAccountView();
+
 
 
 
