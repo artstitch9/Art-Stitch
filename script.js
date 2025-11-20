@@ -149,7 +149,6 @@ function addToCart(id){
   saveCart();
   renderCart();
 
-  // Abrir carrito automáticamente en PC + CEL
   cartEl.classList.remove('hidden');
 }
 
@@ -196,7 +195,7 @@ window.changeQty = function(id, delta){
 };
 
 // ===============================
-// ENVIAR COMPRA AL SERVIDOR (BREVO)
+// ⭐ ENVIAR COMPRA AL SERVIDOR (CORREGIDO)
 // ===============================
 async function enviarCompraAlServidor(clienteEmail, shippingData, rememberShipping) {
   const body = {
@@ -208,7 +207,7 @@ async function enviarCompraAlServidor(clienteEmail, shippingData, rememberShippi
   };
 
   try {
-    const res = await fetch("http://localhost:3000/api/compra", {
+    const res = await fetch("https://backend-artstitch.onrender.com/api/compra", {   // ⭐ CORREGIDO
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
@@ -367,7 +366,7 @@ let userData = null;
 
 function updateAccountView() {
   const notLogged = document.getElementById("account-not-logged");
-  const logged = document.getElementById("account-logged");
+  const logged = document.get.getElementById("account-logged");
   const welcome = document.getElementById("welcome-user");
 
   if (token) {
@@ -381,6 +380,9 @@ function updateAccountView() {
   }
 }
 
+// ===============================
+// ⭐ REGISTRO — URL CORREGIDA
+// ===============================
 document.getElementById("btn-register").addEventListener("pointerup", async () => {
   const name = document.getElementById("reg-name").value.trim();
   const phone = document.getElementById("reg-phone").value.trim();
@@ -394,19 +396,9 @@ document.getElementById("btn-register").addEventListener("pointerup", async () =
 
   if (!email || !pass) return alert("Completá email y contraseña.");
 
-  const body = {
-    name,
-    phone,
-    email,
-    password: pass,
-    address,
-    localidad,
-    provincia,
-    pais,
-    cp
-  };
+  const body = { name, phone, email, password: pass, address, localidad, provincia, pais, cp };
 
-  const res = await fetch("http://localhost:3000/api/register", {
+  const res = await fetch("https://backend-artstitch.onrender.com/api/register", {  // ⭐ CORREGIDO
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body)
@@ -419,11 +411,14 @@ document.getElementById("btn-register").addEventListener("pointerup", async () =
   alert("Cuenta creada con éxito 💖 Ahora iniciá sesión.");
 });
 
+// ===============================
+// ⭐ LOGIN — URL CORREGIDA
+// ===============================
 document.getElementById("btn-login").addEventListener("pointerup", async () => {
   const email = document.getElementById("login-email").value.trim();
   const pass = document.getElementById("login-pass").value.trim();
 
-  const res = await fetch("http://localhost:3000/api/login", {
+  const res = await fetch("https://backend-artstitch.onrender.com/api/login", {  // ⭐ CORREGIDO
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password: pass })
@@ -435,7 +430,7 @@ document.getElementById("btn-login").addEventListener("pointerup", async () => {
 
   token = data.token;
   userName = data.name;
-  userData = data.user || null;   // ⬅⬅⬅ ESTA ES LA PARTE IMPORTANTE
+  userData = data.user || null;
 
   localStorage.setItem("artstitch_token", token);
   localStorage.setItem("artstitch_user", userName);
@@ -445,6 +440,9 @@ document.getElementById("btn-login").addEventListener("pointerup", async () => {
   updateAccountView();
 });
 
+// ===============================
+// LOGOUT
+// ===============================
 document.getElementById("btn-logout").addEventListener("pointerup", () => {
   localStorage.removeItem("artstitch_token");
   localStorage.removeItem("artstitch_user");
@@ -453,10 +451,13 @@ document.getElementById("btn-logout").addEventListener("pointerup", () => {
   updateAccountView();
 });
 
+// ===============================
+// ⭐ HISTORIAL — URL CORREGIDA
+// ===============================
 async function cargarHistorial() {
   if (!token) return;
 
-  const res = await fetch("https://backend-artstitch.onrender.com", {
+  const res = await fetch("https://backend-artstitch.onrender.com/api/historial", {   // ⭐ CORREGIDO
     headers: { "Authorization": "Bearer " + token }
   });
 
@@ -522,7 +523,6 @@ document.getElementById("shipping-confirm").addEventListener("pointerup", ()=> {
 
   const rememberShipping = document.getElementById("ship-remember").checked;
 
-  // ⭐ AHORA SÍ TOMA EL EMAIL DEL INPUT
   const emailCliente = document.getElementById("ship-email").value.trim();
   if(!emailCliente){
     alert("Ingresá tu correo para recibir la confirmación 💌");
@@ -539,13 +539,3 @@ document.getElementById("shipping-confirm").addEventListener("pointerup", ()=> {
 });
 
 updateAccountView();
-
-
-
-
-
-
-
-
-
-
