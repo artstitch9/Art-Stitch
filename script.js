@@ -414,8 +414,6 @@ document.getElementById("btn-register").addEventListener("pointerup", async () =
 
   const data = await res.json();
 
-  userData = data; 
-
   if (!data.ok) return alert(data.msg || "Error en registro.");
 
   alert("Cuenta creada con éxito 💖 Ahora iniciá sesión.");
@@ -437,8 +435,7 @@ document.getElementById("btn-login").addEventListener("pointerup", async () => {
 
   token = data.token;
   userName = data.name;
-
-  userData = data.user || null;
+  userData = data.user || null;   // ⬅⬅⬅ ESTA ES LA PARTE IMPORTANTE
 
   localStorage.setItem("artstitch_token", token);
   localStorage.setItem("artstitch_user", userName);
@@ -540,6 +537,7 @@ document.getElementById("shipping-confirm").addEventListener("pointerup", ()=> {
 });
 
 updateAccountView();
+
 
 
 
