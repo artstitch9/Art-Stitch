@@ -522,8 +522,11 @@ document.getElementById("shipping-confirm").addEventListener("pointerup", ()=> {
   const rememberShipping = document.getElementById("ship-remember").checked;
 
   // pedir email
-  const emailCliente = prompt("Ingresá tu email para confirmar la compra:");
-  if(!emailCliente) return;
+  const emailCliente = document.getElementById("ship-email").value.trim();
+if(!emailCliente) {
+  alert("Ingresá el email para recibir la confirmación 💌");
+  return;
+}
 
   enviarCompraAlServidor(emailCliente, shippingData, rememberShipping);
 
@@ -537,6 +540,7 @@ document.getElementById("shipping-confirm").addEventListener("pointerup", ()=> {
 });
 
 updateAccountView();
+
 
 
 
